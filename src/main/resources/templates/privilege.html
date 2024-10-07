@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+    <link rel="stylesheet" href="../resources/css/user.css">
+     <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+ 
+   <!-- link datatTable css file -->
+   <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+   
+   <!-- link dataTable js file -->
+   <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="/resources/js/sweetalert.js"></script>
+
+    
+
+   
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"><i class="fa-solid  fa-1x"></i> Privilege Management</h2>
+            </div>
+        </div>
+       </div>
+
+
+        <div class="row mt-3">
+            <div class="col-1"></div>
+            <div class="col-6 mb-2">
+                <ul class="nav nav-pills ms-2 "  >
+
+                    <li class="nav-item " style="border-color: #0a53be" >
+                         <a class="nav-link active "   data-bs-toggle="tab" href="#PrivilegeTable"><i class="fa-solid fa-outdent me-3"></i> Privilege Table</a>
+
+                    </li>
+
+                    <li class="nav-item" style="border-color: #0a53be">
+                        <a class="nav-link "  data-bs-toggle="tab" href="#PrivilegeForm"  ><i class="fa-regular fa-pen-to-square me-3"></i> Privilege Form </a>
+
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-3 mb-2 justify-content-end" >
+                <ul class="nav nav-pills ms-3 ">
+                    <li class="nav-item " style="border-color: #0a53be">
+                        <button type="button" class="btn btn-info me-3" onclick="printCompleteTable()" style="color: white">Print Privilege Table</button>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <div class="tab-content" >
+            <div class="tab-pane fade " id="PrivilegeForm">
+                <!-- patient form start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <div class="card form-area ">
+                            <div class="card-body ">
+
+                                <div class="row mt-3">
+
+                                    <div class="col-1"></div>
+                                    <div class="col-6 mt-3  ">
+
+                                        <h2 class=" mt-3 align-center" id="privilegeTitle"> New Privilege Enrollment</h2>
+
+
+                                    </div>
+                                    <div class="col-3 text-center mt-3">
+                                    </div>
+
+                                    <div class="col-1  mt-3 align-middle text-center">
+                                        <button class="btn btn-primary" id="privilegerefreshbtn" onclick="refreshPrivilegeFormByuserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>
+
+
+                                    <div class="row">
+                                        <div class="col-1"></div>
+                                        <div class="col-10 form-area mt-2">
+
+
+
+                                            <hr class="hr mb-3" />
+
+                                            <!-- form area start -->
+
+                                            <form action="" onsubmit="return false">
+                                                <!-- reqired field -->
+                                                <div class="row">
+                                                    <div class="col-12 text-end  ">
+
+                                                        <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- reqired field end  -->
+
+                                                <!-- Select Role start -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="selectRole" class="fw-bold form-label">Role  <span class="text-danger">*</span></label>
+                                                            <select id="selectRole" class="form-select"  required placeholder="select Role"
+                                                                    onchange="dropDownValidationD(selectRole,'','privilege','role_id'); FilteredModuleList()">
+
+
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- select Role field end -->
+
+                                                <!-- select module start -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="selectModule" class="fw-bold form-label">Module  <span class="text-danger">*</span></label>
+                                                            <select id="selectModule" class="form-select"  required placeholder="select Module"
+                                                                    onchange="dropDownValidationD(selectModule,'','privilege','module_id')">
+
+
+
+                                                            </select>
+                                                        </div>
+
+
+                                                    </div>
+
+
+
+                                                </div>
+                                                <!-- select module end -->
+
+
+                                                <!-- select checkbox start  -->
+                                                <div class="row mt-3 mb-2">
+                                                    <div class="col-2">
+                                                        <label class="form-check-label fw-bold" for="checkboxSelect">
+                                                            Select Privilege :
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+
+                                                            <div class="form-check">
+
+                                                                <input class="form-check-input fw-bold" type="checkbox" id="checkboxSelect"
+                                                                       onchange="checkboxValidation(checkboxSelect,'privilege','privselect',true,false,checkboxSelLabel,'Granted','Not Granted')">
+                                                                <label class="form-check-label fw-bold" for="checkboxSelect" id="checkboxSelLabel">
+                                                                    Not-Granted
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+
+                                                    </div>
+
+                                                </div>
+                                                <!--checkbox select end -->
+
+                                                <!-- insert checkbox start  -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-2">
+                                                        <label class="form-check-label fw-bold" for="checkboxInsert">
+                                                            Insert Privilege :
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+
+                                                            <div class="form-check">
+
+                                                                <input class="form-check-input fw-bold" type="checkbox" id="checkboxInsert"
+                                                                       onchange="checkboxValidation(checkboxInsert,'privilege','privinsert',true,false,checkboxInsLabel,'Granted','Not Granted')">
+                                                                <label class="form-check-label fw-bold" for="checkboxInsert" id="checkboxInsLabel">
+                                                                    Not-Granted
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+
+                                                    </div>
+
+
+
+                                                </div>
+                                                <!--checkbox insert end -->
+
+                                                <!-- update checkbox start  -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-2">
+                                                        <label class="form-check-label fw-bold" for="checkboxUpdate">
+                                                            Update Privilege:
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+
+                                                            <div class="form-check">
+
+                                                                <input class="form-check-input fw-bold" type="checkbox" id="checkboxUpdate"
+                                                                       onchange="checkboxValidation(checkboxUpdate,'privilege','privupdate',true,false,checkboxUpdLabel,'Granted','Not Granted')">
+                                                                <label class="form-check-label fw-bold" for="checkboxUpdate" id="checkboxUpdLabel">
+                                                                    Not-Granted
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-1">
+
+                                                    </div>
+
+                                                </div>
+                                                <!--checkbox update end -->
+
+
+                                                <!-- checkbox delete start  -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-2">
+                                                        <label class="form-check-label fw-bold" for="checkboxDelete">
+                                                            Delete Privilege :
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+
+                                                            <div class="form-check">
+
+                                                                <input class="form-check-input fw-bold" type="checkbox" id="checkboxDelete"
+                                                                       onchange="checkboxValidation(checkboxDelete,'privilege','privdelete',true,false,checkboxDelLabel,'Granted','Not Granted')">
+                                                                <label class="form-check-label fw-bold" for="checkboxDelete" id="checkboxDelLabel">
+                                                                    Not-Granted
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+
+                                                    </div>
+
+
+                                                </div>
+                                                <!--checkbox delete end -->
+
+
+
+
+
+                                                <div class="row mt-5 mb-3">
+                                                    <div class="col-4 text-start">
+                                                        <button type="button" class="btn btn-danger buttons btn-clear" onclick="buttonPrivilegeClear()"><i class="fa-solid fa-trash text-end"></i> CLEAR</button>
+                                                    </div>
+                                                    <div class="col-8 text-end">
+                                                        <button type="button" class="btn btn-warning buttons" id="privUpdBtn" onclick="buttonPrivilegeUpdate()"><i class="fas fa-edit"></i> UPDATE</button>
+                                                        <button type="submit" class="btn btn-success buttons" id="privAddBtn" onclick="buttonPrivilegeAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                                    </div>
+                                                </div>
+                                            </form>
+
+
+
+
+                                        </div>
+                                        <div class="col-1"></div>
+
+
+
+                                    </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                    <!--  form end -->
+                </div>
+            </div>
+            <div class="tab-pane fade show active" id="PrivilegeTable" >
+                <!--  table start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10  ">
+                        <div class="card table-area p-2" >
+                            <table class="table table-hover" id="tableprivilege">
+                                <thead >
+                                <tr>
+                                    <th>#</th>
+                                    <th>Role</th>
+                                    <th> Module</th>
+                                    <th>Select</th>
+                                    <th>Insert</th>
+                                    <th>Update</th>
+                                    <th>Delete</th>
+
+                                    <th class="btn-display">Action</th>
+
+                                </tr>
+
+                                </thead>
+                                <tbody >
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!--  table end -->
+
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-5">
+            <div class="col-1"></div>
+            <div class="col-10 ">
+
+            </div>
+            <div class="col-1 text-end ">
+
+            </div>
+
+        </div>
+
+
+       
+    
+
+
+    </div>
+<!--print employee details-->
+  <div class="modal" id="modalPrintEmployee">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>view details</h2>
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12" id="printPrivilegeTable">
+                    <div class="card m-1">
+                        <div class="card-body " >
+                            <div class="row">
+                                <div class="col-12 mb-1">
+                                    <h1 class="text-center" >Privilege Details</h1>
+
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Role</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdRole"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Module</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdModule"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Select Privilege</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdSelPriv"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Insert Privilege</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdInsPriv"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Update Privilege </p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdUpdPriv"></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Delete Privilege</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdDelPriv"></p>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+
+                </div>
+<!--                <table  class="table table-hover" id="printPrivilegeTable">-->
+<!--                    <tr>-->
+<!--                        <th>Role</th>-->
+<!--                        <td id="tdRole"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th>Module</th>-->
+<!--                        <td id="tdModule"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th>Select Privilege</th>-->
+<!--                        <td id="tdSelPriv"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th> Insert Privilege</th>-->
+<!--                        <td id="tdInsPriv"></td>-->
+<!--                    </tr>-->
+
+<!--                    <tr>-->
+<!--                        <th>Update Privilege</th>-->
+<!--                        <td id="tdUpdPriv"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th>Delete Privilege</th>-->
+<!--                        <td id="tdDelPriv"></td>-->
+<!--                    </tr>-->
+<!--                </table>-->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+      <!-- table function  js-->
+      <script src="resources/js/tablefunction.js"></script> 
+      <!-- common function  js -->
+      <script src="resources/js/common.js"></script>
+      <!--validation files  -->
+<!--      <script src="resources/js/emp-val.js"></script>-->
+      <script src="resources/js/validation.js"></script>
+        <!-- emp js -->
+        <script src="resources/controllerjs/privilege.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+     <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+ 
+   <!-- link datatTable css file -->
+   <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+   
+   <!-- link dataTable js file -->
+   <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="/resources/js/sweetalert.js"></script>
+
+    
+
+   
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"><i class="fa-solid  fa-1x"></i> Batch Management</h2>
+            </div>
+        </div>
+       </div>
+
+
+        <div class="row mt-3">
+            <div class="col-1"></div>
+            <div class="col-6 mb-2">
+                <ul class="nav nav-pills ms-2 "  >
+
+                    <li class="nav-item " style="border-color: #0a53be" >
+                         <a class="nav-link active "    data-bs-toggle="tab" href="#BatchTable"><i class="fa-solid fa-outdent me-3"></i> Batch Table</a>
+
+                    </li>
+
+                    <li class="nav-item" style="border-color: #0a53be">
+                        <a class="nav-link "  data-bs-toggle="tab" href="#BatchForm"  ><i class="fa-regular fa-pen-to-square me-3"></i> Batch Form </a>
+
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-2 mb-2 justify-content-end" >
+                <ul class="nav nav-pills ms-3 ">
+                    <li class="nav-item " style="border-color: #0a53be">
+                        <button type="button" class="btn btn-info me-3" onclick="printCompleteTable()" style="color: white">Print Batch Table</button>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <div class="tab-content" >
+            <div class="tab-pane fade " id="BatchForm">
+                <!-- patient form start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <div class="card form-area ">
+                            <div class="card-body ">
+
+                                <div class="row mt-3">
+
+                                    <div class="col-1"></div>
+                                    <div class="col-6 mt-3  ">
+
+                                        <h2 class=" mt-3 align-center"  id="batchTitle"> New Batch Enrollment</h2>
+
+
+                                    </div>
+                                    <div class="col-3 text-center mt-3">
+                                    </div>
+
+                                    <div class="col-1  mt-3 align-middle text-center">
+                                        <button class="btn btn-primary" id="batchrefreshbtn" onclick="refreshBatchFormByUserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>
+
+
+                                    <div class="row">
+                                        <div class="col-1"></div>
+                                        <div class="col-10 form-area mt-2">
+
+
+
+                                            <hr class="hr mb-3" />
+
+                                            <!-- form area start -->
+
+                                            <form action="" onsubmit="return false">
+                                                <!-- reqired field -->
+                                                <div class="row">
+                                                    <div class="col-12 text-end  ">
+
+                                                        <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- required field end  -->
+
+                                                <!-- supplier and purchase drug field start -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-5">
+                                                        <div class="form-group ">
+                                                            <label for="selectSupplier" class="fw-bold form-label"> Supplier <span class="text-danger">*</span></label>
+                                                            <select id="selectSupplier" class="form-select" required
+                                                                    onchange="dropDownValidationD(selectSupplier,'','batch','supplier_id'); purchaseDrugList()"
+                                                            >
+<!--                                                                getorderdetails();enabletotalamountfield()-->
+                                                                <option disabled  selected> 1010</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-7">
+                                                        <div class="form-group ">
+                                                            <label for="selectPdrug" class="fw-bold form-label"> Purchase Item  <span class="text-danger">*</span></label>
+                                                            <select id="selectPdrug" class="form-select" required
+                                                                    onchange="dropDownValidationD(selectPdrug,'','batch','purchasedrug_id');checkPriceFields()">
+
+                                                                <option disabled  selected> 1010</option>
+                                                            </select>
+                                                        </div>
+
+
+                                                    </div>
+
+
+
+
+                                                </div>
+                                                <!--supplier and purchase drug end -->
+
+
+                                                <!-- manufacture and expiry date batch no  fields start  -->
+                                                <div class="row mt-2 mb-2">
+
+                                                    <div class="col-4">
+                                                        <div class="form-group ">
+                                                            <label for=textBatchNo class="fw-bold form-label"> Batch No <span class="text-danger">*</span></label>
+                                                            <input type="text" id="textBatchNo" class="form-control" required placeholder="Enter Batch No"
+                                                                   onkeyup="textFieldValiation(textBatchNo,'^[A-Za-z0-9][A-Za-z0-9\\-/ ]*[A-Za-z0-9]$','batch','batchno')">
+                                                            <!--                                                            ^[A-Za-z0-9-/ ]{2,7}$-->
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-4">
+
+                                                        <div class="form-group">
+                                                            <label for="textManufactureDate" class="form-label fw-bold">Manufacture Date <span class="text-danger">*</span></label>
+                                                            <input type="date" class="form-control" id="textManufactureDate"  required onkeydown="return false"
+                                                                   onchange=" dateFieldValiationD(textManufactureDate,'^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$','batch','manufacturedate')">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label for="textExpiryDate" class="form-label fw-bold">Expiry Date <span class="text-danger">*</span></label>
+                                                            <input type="date" class="form-control" id="textExpiryDate"  required onkeydown="return false"
+                                                                   onchange=" dateFieldValiationD(textExpiryDate,'^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$','batch','expirydate')">
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                                <!--manufacture and expiry date  batch no fields end  -->
+
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-4">
+                                                        <div class="form-group ">
+                                                                <label for="textTotalQty" class="fw-bold form-label">Purchase Item Total Quantity <span class="text-danger">* </span></label>
+                                                            <input type="text" class="form-control" id="textTotalQty" required placeholder="Total Purchase Quantity"
+                                                                   onkeyup="textFieldValiation(textTotalQty,'^[1-9][0-9]{0,3}$','batch','purchasedrugtotalqty');
+                                                                  ">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group ">
+                                                            <label for="textAvailQty" class="fw-bold form-label">Purchase Item Available Quantity <span class="text-danger">* </span></label>
+                                                            <input type="text" class="form-control" id="textAvailQty" required placeholder="Available Quantity"
+                                                                   onkeyup="textFieldValiation(textAvailQty,'^[1-9][0-9]{0,3}$','batch','purchasedrugavailableqty');
+                                                                  ">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group ">
+                                                            <label for="textSalesAvailQty" class="fw-bold form-label">Sales Drug Available Quantity <span class="text-danger">* </span></label>
+                                                            <input type="text" class="form-control" id="textSalesAvailQty" required placeholder="Sales Drug Quantity"
+                                                                   onkeyup="textFieldValiation(textSalesAvailQty,'^[1-9][0-9]{0,3}$','batch','salesdrugavailableqty');
+                                                                  ">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-6">
+                                                        <div class="form-group ">
+                                                            <label for="textPurchasePrice" class="fw-bold form-label">Purchase Price <span class="text-danger">* </span></label>
+                                                            <input type="text" class="form-control" id="textPurchasePrice" required placeholder="Enter Purchase Price"
+                                                                   onkeyup="textFieldValiation(textPurchasePrice,'^[1-9][0-9]{1,5}(\\.[0-9]{2})?$','batch','purchaseprice');calculateSalePrice()
+                                                                  " onchange="insertDecimalPoints()">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group ">
+                                                            <label for="textSalesPrice" class="fw-bold form-label">Sales Price <span class="text-danger">* </span></label>
+                                                            <input type="text" class="form-control" id="textSalesPrice" required placeholder="Enter Sales Price"
+                                                                   onkeyup="textFieldValiation(textSalesPrice,'^[1-9][0-9]{0,7}[.][0-9]{2}$','batch','saleprice');
+                                                                  ">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="row mt-5 mb-3">
+                                                    <div class="col-4 text-start">
+                                                        <button type="button" class="btn btn-danger buttons btn-clear" onclick="buttonBatchClear()" >
+<!--                                                               -->
+                                                        <i class="fa-solid fa-trash text-end"></i> CLEAR</button>
+                                                    </div>
+                                                    <div class="col-8 text-end">
+                                                        <button type="button" class="btn btn-warning buttons" id="btnUpdate" onclick="buttonBatchUpdate()"><i class="fas fa-edit"></i> UPDATE</button>
+                                                        <button type="submit" class="btn btn-success buttons" id="btnAdd" onclick="buttonBatchAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                                    </div>
+                                                </div>
+                                            </form>
+
+
+
+
+                                        </div>
+                                        <div class="col-1"></div>
+
+
+
+                                    </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                    <!--  form end -->
+                </div>
+            </div>
+            <div class="tab-pane fade show active" id="BatchTable" >
+                <!--  table start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10  ">
+                        <div class="card table-area p-2" >
+                            <table class="table table-hover" id="tableBatch">
+                                <thead >
+                                <tr>
+                                    <th>#</th>
+                                    <th>Batch Number</th>
+                                    <th>Purchase Item</th>
+                                    <th>Manufacture Date</th>
+                                    <th>Expiry Date</th>
+
+                                    <th>Sale Drug Available Qty</th>
+                                    <th>Sales Price</th>
+
+                                    <th class="btn-display">Action</th>
+
+                                </tr>
+
+                                </thead>
+                                <tbody >
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!--  table end -->
+
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-5">
+            <div class="col-1"></div>
+            <div class="col-10 ">
+
+            </div>
+            <div class="col-1 text-end ">
+
+            </div>
+
+        </div>
+
+
+       
+    
+
+
+    </div>
+<!--print employee details-->
+  <div class="modal" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>view details</h2>
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="col-md-12" id="printBatchTable">
+                    <div class="card m-1">
+                        <div class="card-body " >
+                            <div class="row">
+                                <div class="col-12 mb-1">
+                                    <h1 class="text-center" >Batch Details</h1>
+
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Batch No</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdBatchNumber"></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Purchase Item</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdPitem"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Supplier Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdSName"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Expriy Date</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdEdate"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Manufacture Date</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdMdate"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Purchase Item Total-Quantity</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdPTotalQty"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Purchase Item Available-Quantity</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdATotalQty"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Sales Item Available Quantity </p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdSAQty"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Sale Price</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdSprice"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Purchase Price</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdPrrice"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+      <!-- table function  js-->
+      <script src="resources/js/tablefunction.js"></script> 
+      <!-- common function  js -->
+      <script src="resources/js/common.js"></script>
+      <!--validation files  -->
+<!--      <script src="resources/js/emp-val.js"></script>-->
+      <script src="resources/js/validation.js"></script>
+        <!-- emp js -->
+        <script src="resources/controllerjs/batch.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+</body>
+</html>

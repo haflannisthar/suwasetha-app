@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+    <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+
+    <!-- css -->
+    <link rel="stylesheet" href="../resources/css/employee.css">
+    <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+
+    <!-- link datatTable css file -->
+    <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+
+    <!-- link dataTable js file -->
+    <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="/resources/js/sweetalert.js"></script>
+
+
+
+
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+
+
+<div class="container-fluid " style="margin-top: 80px">
+
+    <section style="background-color: #eee;">
+        <div class="container py-3">
+
+            <div class="row mb-3">
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-primary  " data-bs-toggle="modal" data-bs-target="#modalUserChange">Change User Details</button>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img src="/resources/images/user2.jpg" alt="avatar"  id="userImgPreview"
+                                 class="rounded-circle img-fluid" style="width: 150px;">
+                            <h5 class="my-3" id="usernameData">John Smith</h5>
+                            <p class="text-muted mb-1" id="roleData">Full Stack Developer</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-12 mb-1">
+                                    <h5  >User Account Details</h5>
+
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >User Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="usernameData2"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="emailData">example@example.com</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Account Status</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="statusData">(097) 234-5678</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Roles</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="rolesData2"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-12 mb-1">
+                                    <h5  >Personal Details</h5>
+
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Employee Number</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="regnoData" ></p>
+                                </div>
+                            </div>
+                             <hr>
+                                <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Full Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="fullnameData" ></p>
+                                </div>
+                            </div>
+                             <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Calling Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="callingnameData" ></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Nic</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="nicData" ></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="emailData2" ></p>
+                                </div>
+                            </div>
+                            <hr>
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <p class="mb-0">Mobile Number</p>
+                                                            </div>
+                                                            <div class="col-sm-9">
+                                                                <p class="text-muted mb-0" id="mobileData"></p>
+                                                            </div>
+                                                        </div>
+
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Land Number</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="landnoData" ></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Address</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="addressData" ></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Civil Status</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="civilstatusData" ></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Gender</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="genderData" ></p>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<div class="modal fade" id="modalUserChange" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal" onclick="refreshodal()" ></button>
+            </div>
+            <div class="modal-body">
+                <!-- username start -->
+                <div class="row mt-2 mb-2">
+                    <div class="col-6">
+                        <div class="form-group  ">
+                            <label for="textUsername" class="fw-bold form-label">Username <span class="text-danger">*</span></label>
+                            <span id="usernameHelpInline" class="form-text"> 5-15 characters long, can contain a-z 0-9</span>
+
+                            <input type="text" required class="form-control" id="textUsername" placeholder="Enter New Username"  onkeyup="textFieldValiation(this,'^[a-zA-Z0-9]{5,16}$','userprofilechange','username')">
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group  ">
+                            <label for="textEmail" class="fw-bold form-label">Email <span class="text-danger">*</span></label>
+                            <input type="text" required class="form-control" id="textEmail" placeholder="Enter new Email"  onkeyup="textFieldValiation(this,'^[a-zA-Z0-9]{3,20}[@][a-zA-Z]{3,20}[.][a-zA-Z]{2,20}$','userprofilechange','email')">
+
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+                <!-- username email end -->
+
+
+                <!-- email start -->
+                <div class="row mt-2 mb-2">
+                    <div class="col-12">
+                        <div class="form-group  ">
+                            <label for="textCurrentPassword" class="fw-bold form-label">Current Password <span class="text-danger">*</span></label>
+
+                            <input type="password" required class="form-control" id="textCurrentPassword" placeholder="Enter Current Password"  onkeyup="textFieldValiation(this,'^[a-zA-Z0-9]{5,16}$','userprofilechange','currentpassword')">
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+                </div>
+                <!-- username email end -->
+
+                <!-- Password and re enter password field  -->
+                <div class="row mt-2 mb-2">
+                    <div class="col-6">
+                        <div class="form-group ">
+                            <label for="textPassword" class="fw-bold form-label">New Password <span class="text-danger">*</span></label>
+                            <span id="passwordHelpInline" class="form-text"> Must be 5-15 characters long.</span>
+                            <input type="password" required class="form-control" id="textPassword" placeholder="Enter New Password" onkeyup="textFieldValiation(this,'^[a-zA-Z0-9]{5,15}$','userprofilechange','newpassword')">
+
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group ">
+                            <label for="textPasswordRT" class="fw-bold form-label">Re-enter New Password <span class="text-danger">*</span></label>
+                            <input type="password" required class="form-control" id="textPasswordRT" placeholder="Re-Enter New Password" onkeyup="PasswordRTValidatorProfile()">
+
+                        </div>
+                    </div>
+
+                </div>
+                <!--Password and re enter password field -->
+
+                <div class="row mb-2 mt-2">
+                    <div class="col-12">
+                        <div class="form-group">
+
+                            <label for="imgUserPreview" class="fw-bold">Image </label>
+                            <button type="button" class="btn btn-primary" id="btnImageSelect" onclick="fileUserPhoto.click()">Select Image</button>
+                            <button type="button" class="btn btn-warning" id="btnImageClear" onclick="btnClearImage()">Clear Image</button>
+
+
+                            <img src="/resources/images/user2.jpg" alt="image_of_user" width="100px" height="100px" id="imgUserPreview" class="mt-1 mb-1">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" disabled id="txtUserPhoto">
+
+                        </div>
+                        <input type="file" class="form-control d-none" id="fileUserPhoto" onchange="validatefileprofile(this,'userprofilechange','user_photo','user_photo_name',imgUserPreview,txtUserPhoto)">
+
+
+
+                    </div>
+                </div>
+
+
+                <div class="row mt-3 mb-3">
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-success buttons" onclick="btnUserUpdate()"><i class="fas fa-edit"></i> UPDATE</button>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- common function  js -->
+<script src="resources/js/common.js"></script>
+<!--validation files  -->
+<!--      <script src="resources/js/emp-val.js"></script>-->
+<script src="resources/js/validation.js"></script>
+<script src="resources/controllerjs/profile.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+
+<!-- table function  js-->
+<script src="resources/js/tablefunction.js"></script>
+</body>
+</html>

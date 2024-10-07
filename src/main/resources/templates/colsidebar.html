@@ -1,0 +1,183 @@
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasTopLabel" th:fragment="SidebarColFragment">
+
+    <div class="offcanvas-body">
+
+
+<!--image role and logged suer name-->
+        <div class=" mb-2 align-items-center justify-content-between mt-3">
+            <a  class="text-nowrap  ">
+                <!--            <img src="/resources/images/doctor_profile_picture.svg" class="profile-logo rounded mx-auto d-block"  alt="">-->
+                <img src="/resources/images/user2.jpg" width="100px" height="100px" id="showuserImage" class="profile-logo rounded mx-auto d-block"  alt="">
+            </a>
+            <div class="text-center fw-bold" th:text="${loggedusername}">
+                Sarah Smith
+            </div>
+            <div class="text-center role-name " th:text="${rolename}">
+                haflan
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <a href="/dashboard" class="accordion-button no-dropdown-icon">
+                    Dashboard
+                </a>
+            </h2>
+        </div>
+
+
+<!--        employee, user management-->
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <!-- Administration -->
+            <div class="accordion-item" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Administration
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <ul>
+                            <li><a href="/employee">Employee</a></li>
+                            <li><a href="/user">User</a></li>
+                            <li><a href="/privilege">Privilege</a></li>
+                            <li><a href="/designation">Designation</a></li>
+                            <li><a href="/role">Role</a></li>
+                            <li><a href="/module">Module</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Item -->
+            <div class="accordion-item" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        Sales Item
+                    </button>
+                </h2>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <ul>
+                            <li><a href="/salesdrug">Sale Item</a></li>
+                            <li><a href="/category">Category</a></li>
+                            <li><a href="/subcategory">Sub Category</a></li>
+                            <li><a href="/brand">Brand</a></li>
+                            <li><a href="/producttype">Product Type</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purchase Item -->
+            <div class="accordion-item" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                        Purchase Item
+                    </button>
+                </h2>
+                <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <ul>
+                            <li><a href="/purchasedrug">Purchase Item</a></li>
+                            <li><a href="/purchaseproducttype">Product Type</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Supplier -->
+            <div class="accordion-item" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
+                        Supplier
+                    </button>
+                </h2>
+                <div id="flush-collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <ul>
+                            <li><a href="/supplier">Supplier</a></li>
+                            <li><a href="/supplierpayment">Supplier Payment</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purchase Order -->
+            <div class="accordion-item" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+                        Purchase Order
+                    </button>
+                </h2>
+                <div id="flush-collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <ul>
+                            <li><a href="/purchaseorder">Purchase Order</a></li>
+                            <li><a href="/grn">Grn</a></li>
+                            <li><a href="/batch">Batch</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clinic -->
+            <div class="accordion-item" th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Medical Receptionist') || roles.contains('Doctor')}">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven" aria-expanded="false" aria-controls="flush-collapseSeven">
+                        Clinic
+                    </button>
+                </h2>
+                <div id="flush-collapseSeven" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <ul>
+                            <li th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Medical Receptionist')}"><a href="/patient">Patient</a></li>
+                            <li th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Medical Receptionist')}"><a href="/doctoravailability">Doctor Availability</a></li>
+                            <li th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Medical Receptionist')}"><a href="/appointment">Appointment</a></li>
+                            <li th:if="${roles.contains('Doctor')}"><a href="/prescription">Prescription</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invoice -->
+            <div class="accordion-item" th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Pharmacist') || roles.contains('Cashier') || roles.contains('Medical Receptionist')}">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEight" aria-expanded="false" aria-controls="flush-collapseEight">
+                        Invoice
+                    </button>
+                </h2>
+                <div id="flush-collapseEight" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <ul>
+                            <li th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Medical Receptionist')}"><a href="/appointmentpayment">Appointment Invoice</a></li>
+                            <li th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Pharmacist') || roles.contains('Cashier')}"><a href="/prescriptionpayment">Prescription Invoice</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report -->
+            <div class="accordion-item" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseNine" aria-expanded="false" aria-controls="flush-collapseNine">
+                        Report
+                    </button>
+                </h2>
+                <div id="flush-collapseNine" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <ul>
+                            <li><a href="/reportworkingemployee">Employee Report</a></li>
+                            <li><a href="/reportappointment">Appointment Report</a></li>
+                            <li><a href="/reportporder">Purchase Order Report</a></li>
+                            <li><a href="/reportsale">Income Report</a></li>
+                            <li><a href="/reportinventory">Inventory Report</a></li>
+                            <li><a href="/reportroproq">ROP/ROQ Report</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

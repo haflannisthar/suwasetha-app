@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/resources/images/logo.png" type="image/png" sizes="96x96">
+
+    <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+     <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+ 
+   <!-- link datatTable css file -->
+   <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+   
+   <!-- link dataTable js file -->
+   <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="/resources/js/sweetalert.js"></script>
+    <
+
+
+    <title th:text="${title}"></title>
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"> Sales Item Management</h2>
+            </div>
+        </div>
+       </div>
+
+
+        <div class="row mt-3">
+            <div class="col-1"></div>
+            <div class="col-6 mb-2">
+                <ul class="nav nav-pills ms-2 "  >
+
+                    <li class="nav-item " style="border-color: #0a53be" >
+                         <a class="nav-link active "   data-bs-toggle="tab" href="#SalesDrugTable"><i class="fa-solid fa-outdent me-3"></i> Sales Item Table</a>
+
+                    </li>
+
+                    <li class="nav-item" style="border-color: #0a53be">
+                        <a class="nav-link "  data-bs-toggle="tab" href="#SalesDrugForm"  ><i class="fa-regular fa-pen-to-square me-3"></i> Sales Item Form </a>
+
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-3 mb-2 justify-content-end" >
+                <ul class="nav nav-pills ms-3 ">
+                    <li class="nav-item " style="border-color: #0a53be">
+                        <button type="button" class="btn btn-info me-3" onclick="printCompleteTable()" style="color: white">Print Sales Drug Table</button>
+                    </li>
+                </ul>
+
+            </div>
+<!--            <div class="col-1"></div>-->
+        </div>
+
+        <div class="tab-content" >
+            <div class="tab-pane fade " id="SalesDrugForm">
+                <!-- patient form start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <div class="card form-area ">
+                            <div class="card-body ">
+
+                                <div class="row mt-3">
+
+                                    <div class="col-1"></div>
+                                    <div class="col-6 mt-3  ">
+
+                                        <h2 class=" mt-3 align-center" id="Title"> New Sales Item Enrollment</h2>
+
+
+                                    </div>
+                                    <div class="col-3 text-center mt-3">
+                                    </div>
+
+                                    <div class="col-1  mt-3 align-middle text-center">
+                                        <button class="btn btn-primary" id="refreshBtn" onclick="refreshSalesdrugFormByuserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>
+
+                                    <div class="row">
+                                        <div class="col-1"></div>
+                                        <div class="col-10 form-area mt-2">
+
+
+
+                                            <hr class="hr mb-3" />
+
+                                            <!-- form area start -->
+
+                                            <form action="" onsubmit="return false">
+                                                <!-- reqired field -->
+                                                <div class="row">
+                                                    <div class="col-12 text-end  ">
+
+                                                        <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- required field end  -->
+
+                                                <!-- Item type Category Sub category -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-4">
+
+                                                        <div class="form-group ">
+                                                            <label for="selectItemType" class="fw-bold form-label"> Item Type <span class="text-danger">*</span></label>
+                                                            <select class="form-select" id="selectItemType" required
+                                                                    onchange="dropDownValidationD(selectItemType,'','salesdrug','itemtype_id');
+                                                                    filterByItemType();enableCategory(selectItemType.value)">
+                                                            </select>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-4">
+
+                                                        <div class="form-group ">
+                                                            <label for="selectCategory" class="fw-bold form-label"> Category <span class="text-danger">*</span> </label> <button style="background-color: #0b5ed7;border-radius: 5px" data-bs-toggle="modal" data-bs-target="#modalCategoryAddForm" > <i class="fas fa-plus" style="color: #ffffff;"></i></button>
+                                                            <select class="form-select" id="selectCategory" required
+                                                                    onchange="dropDownValidationD(selectCategory,'','salesdrug','category_id');
+                                                        filterByCatType();enableSubCategory(selectCategory.value)">
+                                                            </select>
+
+                                                        </div>
+
+                                                    </div>
+<!--modalSubCategoryAddForm-->
+                                                    <div class="col-4">
+                                                        <div class="form-group ">
+                                                            <label for="selectSubCategory" class="fw-bold form-label"> Sub Category <span class="text-danger">*</span> </label> <button style="background-color: #0b5ed7;border-radius: 5px" data-bs-toggle="modal" data-bs-target="#modalSubCategoryAddForm" onclick=" refreshGenericForm()" > <i class="fas fa-plus" style="color: #ffffff;"></i></button>
+                                                            <select class="form-select" id="selectSubCategory" required
+                                                                    onchange="dropDownValidationD(selectSubCategory,'','salesdrug','subcategory_id');
+                                                     enableBrand(selectSubCategory.value)">
+                                                            </select>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                                <!-- Item type Category Sub category end -->
+
+                                                <!-- Brand product type, unit-type, unit size -->
+                                                <div class="row mt-4 mb-2">
+                                                    <div class="col-3">
+                                                        <div class="form-group">
+                                                            <label for="selectBrand" class="fw-bold form-label"> Brand <span class="text-danger">*</span> </label> <button style="background-color: #0b5ed7;border-radius: 5px" data-bs-toggle="modal" data-bs-target="#modalBrandAddForm" onclick="refreshBrandForm()"> <i class="fas fa-plus" style="color: #ffffff;"></i></button>
+                                                            <select class="form-select" id="selectBrand" required
+                                                                    onchange="dropDownValidationD(selectBrand,'','salesdrug','brand_id');
+                                                     enableProductType(selectBrand.value) ">
+                                                                <option value="" selected disabled>Select Brand</option>
+                                                            </select>
+                                                    </div>
+                                                    </div>
+
+
+                                                    <div class="col-3">
+                                                        <div class="form-group">
+                                                            <label for="selectProductType" class="fw-bold form-label"> Product Type <span class="text-danger">*</span> </label>
+                                                            <select class="form-select" id="selectProductType" required
+                                                                    onchange="dropDownValidationD(selectProductType,'','salesdrug','producttype_id');
+                                                                enableUnitType(selectProductType.value)">
+                                                                <option value="" selected disabled>Select product type</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="form-group">
+                                                            <label for="selectUnitType" class="fw-bold form-label"> Unit Type </label>
+                                                            <select class="form-select" id="selectUnitType" required
+                                                                    onchange="dropDownValidationD(selectUnitType,'','salesdrug','unittype_id');
+                                                                enableUnitSize(selectUnitType.value) ">
+                                                                <option value="" selected disabled>Select Unit type</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="form-group">
+                                                            <label for="textUnitSize" class="fw-bold form-label"> Unit Size </label>
+                                                            <input type="text" class="form-control" id="textUnitSize" required placeholder="Enter Unit Size"
+                                                                   onkeyup="textFieldValiation(textUnitSize,'^([1-9]{1}[0-9]{0,2})$','salesdrug','productsize');
+
+                                                                    generateDrugName()" />
+
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <!-- Brand product type, unit-type, unit size -->
+                                                  <!-- drug name and item code -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-8">
+                                                        <div class="form-group">
+                                                            <label for="textDrugName" class="fw-bold">Item Name <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="textDrugName" placeholder="Item Name" required
+                                                                      onkeyup="textFieldValiation(textDrugName,'^.*$','salesdrug','name'); validateName();
+                                                                        "
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label for="textItemCode" class="fw-bold">Item Code <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="textItemCode" placeholder="Item Code" required
+                                                                   onkeyup="textFieldValiation(textItemCode,'^(?!0000000000000)[0-9]{6,13}$','salesdrug','code');
+                                                                        "
+                                                            >
+                                                        </div>
+                                                    </div>
+
+
+
+
+                                                </div>
+                                                <!--drug name end  -->
+
+                                                <!-- rop/ro/status -->
+                                                <div class="row mt-2 mb-3">
+
+
+                                                    <div class="col-4">
+                                                        <div class="form-group ">
+                                                            <label for="selectRoq" class="fw-bold form-label">Re-order quantity  </label>
+                                                            <input type="text"  id="selectRoq" class="form-control"  placeholder="Enter Roq"
+                                                                     onkeyup=" textFieldValiation(selectRoq,'^(([1-9]{1})||([1-9]{1}[0-9]{1,2}))$','salesdrug','roq')">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-4">
+                                                        <div class="form-group ">
+                                                            <label for="selectRop" class="fw-bold form-label">Re-order point  </label>
+                                                            <input type="text"  id="selectRop" class="form-control"  placeholder="Enter Rop"
+                                                                   onkeyup=" textFieldValiation(selectRop,'^(([1-9]{1})||([1-9]{1}[0-9]{1}))$','salesdrug','rop')">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label for="selectDrugStatus" class="fw-bold form-label"> Drug Status <span class="text-danger">*</span></label>
+                                                            <select class="form-select" id="selectDrugStatus" required
+                                                                    onchange="dropDownValidationD(selectDrugStatus,'','salesdrug','drugstatus_id')">
+                                                                <option value="" selected disabled>Select product type</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                                <!-- rop/ro/status -->
+
+                                                <!-- Note field -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="textNote" class="fw-bold">Note </label>
+                                                        <textarea type="text" class="form-control" id="textNote" placeholder="Enter Note"
+                                                                  onkeyup="textFieldValiation(textNote,'^.*$','salesdrug','note')"
+                                                        ></textarea>
+                                                    </div>
+                                                </div>
+                                                <!-- Note field end -->
+                                                       <div class="row mt-5 mb-3">
+                                                    <div class="col-4 text-start">
+                                                        <button type="button" id="reset" class="btn btn-danger buttons btn-clear"  onclick="buttonClear()">
+
+                                                        <i class="fa-solid fa-trash text-end"></i> CLEAR</button>
+                                                    </div>
+                                                    <div class="col-8 text-end">
+                                                        <button type="button" class="btn btn-warning buttons" id="btnUpdateGrg" onclick="buttonSalesDrugUpdate()"><i class="fas fa-edit"></i> UPDATE</button>
+                                                        <button type="submit" class="btn btn-success buttons" id="btnAddGrg" onclick="buttonSalesDrugAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                                    </div>
+                                                </div>
+                                            </form>
+
+
+
+
+                                        </div>
+                                        <div class="col-1"></div>
+
+
+
+                                    </div>
+
+
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                    <!--  form end -->
+                </div>
+            </div>
+            <div class="tab-pane fade show active" id="SalesDrugTable" >
+                <!--  table start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10  ">
+                        <div class="card table-area p-2" >
+                            <table class="table table-hover" id="tableDrug">
+                                <thead >
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item code-Name</th>
+                                    <th>Item Type</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th class="btn-display">Action</th>
+
+                                </tr>
+
+                                </thead>
+                                <tbody >
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!--  table end -->
+
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-5">
+            <div class="col-1"></div>
+            <div class="col-10 ">
+
+            </div>
+            <div class="col-1 text-end ">
+
+            </div>
+
+        </div>
+
+
+       
+    
+
+
+    </div>
+<!--print  details-->
+  <div class="modal" id="modalPrint">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="col-md-12" id="printDrugTable">
+                    <div class="card m-1">
+                        <div class="card-body " >
+                            <div class="row">
+                                <div class="row">
+                                    <div class="col-2" ></div>
+                                    <div class="col-3 " >
+                                        <img src="/resources/images/Suwa-setha-3.png" alt="picture-of-suwasetha" class="rounded float-end" width="50px" height="50px">
+                                    </div>
+                                    <div class="col-5 mb-1">
+                                        <h1 class="text-start" >Sales Item Details</h1>
+
+                                    </div>
+                                    <div class="col-2" ></div>
+
+                                </div>
+
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Item Id</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdDrugId"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Item Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdDrugName"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Item Type</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdItemType"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Category</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdCategory"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Sub Category</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdSubCategory"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Brand Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdBrandName"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Product Type</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdProductType"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Unit Type</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdUnitType"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Unit Size</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdUnitSize"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0"> Re-order Point</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdRop"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0"> Re-order Quantity</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdRoq"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0"> Drug Status</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdDrugStatus"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Note</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdNote"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0"> Added User</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdUser"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!--category add modal-->
+
+<div class="modal" id="modalCategoryAddForm" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+                                <button class="btn btn-primary"  onclick="refreshCategoryFormByuserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                            </div>
+                        </div>
+
+
+
+                        <hr class="hr mb-3" />
+
+                        <!-- form area start -->
+
+                        <form action="" onsubmit="return false">
+
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-10 text-end  ">
+                                    <hr class="hr mb-3" />
+                                    <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <div class="row mt-2 mb-2">
+
+
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="textCategory" class="form-label fw-bold">Category Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="textCategory" placeholder="Enter Category " required
+                                               onkeyup=" textFieldValiation(textCategory,'^([A-Z][a-z]{2,15})([\\s&-][A-Z][a-z]{2,15})*$','category','name')
+                                      ">
+<!--                                        (([A-Z][a-z]{3,20})|(([A-Z][a-z]{2,20}[-& ])+([A-Z][a-z]{3,20}){1}))-->
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="selectModalItemType" class="fw-bold form-label"> Item Type <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="selectModalItemType" required
+                                            onchange="dropDownValidationD(selectModalItemType,'','category','itemtype_id');">
+                                        <option value="" selected disabled>Select Item Type</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-5 mb-3">
+                                <div class="col-4 text-start">
+                                </div>
+                                <div class="col-8 text-end">
+                                    <button type="submit" class="btn btn-success buttons" id="btnAdd" onclick="buttonCategoryAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                </div>
+                            </div>
+
+                        </form>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!--sub category add modal-->
+<div class="modal" id="modalSubCategoryAddForm" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+                                <button class="btn btn-primary"  onclick="refreshSubCategoryFormByuserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                            </div>
+                        </div>
+
+
+
+                        <hr class="hr mb-3" />
+
+                        <!-- form area start -->
+
+                        <form action="" onsubmit="return false">
+
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-10 text-end  ">
+                                    <hr class="hr mb-3" />
+                                    <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <div class="row mt-2 mb-2">
+
+
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="textSubCategory" class="form-label fw-bold">Sub Category <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="textSubCategory" placeholder="Enter sub-category name" required
+                                               onkeyup=" textFieldValiation(textSubCategory,'^(([A-Z][a-z]{2,20})||(([A-Z][a-z]{2,20}[ ])+([A-Z][a-z]{2,20}){1}))$','subcategory','name')
+                                      ">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="selectModalCategory" class="fw-bold form-label"> Category <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="selectModalCategory" required
+                                            onchange="dropDownValidationD(selectModalCategory,'','subcategory','category_id');">
+                                        <option value="" selected disabled>Select Item Type</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-5 mb-3">
+                                <div class="col-4 text-start">
+                                </div>
+                                <div class="col-8 text-end">
+                                    <button type="submit" class="btn btn-success buttons" id="btnSubCatAdd" onclick="buttonGenericAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                </div>
+                            </div>
+
+                        </form>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!--brand add modal-->
+<div class="modal" id="modalBrandAddForm" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+                                <button class="btn btn-primary"  onclick="refreshBrandFormByuserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                            </div>
+                        </div>
+
+
+
+                        <hr class="hr mb-3" />
+
+                        <!-- form area start -->
+
+                        <form action="" onsubmit="return false">
+
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-10 text-end  ">
+                                    <hr class="hr mb-3" />
+                                    <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <div class="row mt-2 mb-2">
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="textBrand" class="form-label fw-bold">Brand <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="textBrand" placeholder="Enter Brand name" required
+                                               onkeyup=" textFieldValiation(textBrand,'^[A-Z][a-z\'-.&]{2,19}([ ]?[A-Z][a-z\'-.&]{2,19})*( [A-Z][a-z]{2,19})?( \\((pvt)\\) ltd)?$','brand','name')
+                                      ">
+                                    </div>
+<!--(([A-Z][a-z'-.&]{2,20})||(([A-Z][a-z'-.&]{2,20}[ ])+([A-Za-z]{2,20}){1})||(([A-Z][a-z'-.&]{2,20}[ ]+)+\(pvt\)[ ]ltd))-->
+                                </div>
+
+
+                                <div class="col-4">
+                                    <div class="form-group ">
+                                        <label for="selectCategory" class="fw-bold form-label"> Category <span class="text-danger">*</span></label>
+
+                                        <div class="dropdown">
+
+
+                                            <button class="btn btn-outline-secondary dropdown-toggle" style="width: 300px" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"
+                                            >
+                                                Select Categories
+                                            </button>
+                                            <ul class="dropdown-menu" style=" z-index: 1000;width: 300px"  id="selectBrandModalCategory" aria-labelledby="dropdownMenuButton" >
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-4" >
+                                    <div class="form-group">
+                                        <label  class="form-label fw-bold">Selected Categories <span class="text-danger">*</span></label>
+                                        <div id="selectedCatogories"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="row mt-5 mb-3">
+                                <div class="col-4 text-start">
+                                </div>
+                                <div class="col-8 text-end">
+                                    <button type="submit" class="btn btn-success buttons"  onclick="buttonBrandAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                </div>
+                            </div>
+
+                        </form>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+      <!-- table function  js-->
+      <script src="resources/js/tablefunction.js"></script> 
+      <!-- common function  js -->
+      <script src="resources/js/common.js"></script>
+      <!--validation files  -->
+<!--      <script src="resources/js/emp-val.js"></script>-->
+      <script src="resources/js/validation.js"></script>
+        <!-- emp js -->
+        <script src="resources/controllerjs/salesdrug.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+   
+</body>
+</html>
+

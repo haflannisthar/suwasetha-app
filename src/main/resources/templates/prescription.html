@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+     <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+ 
+   <!-- link datatTable css file -->
+   <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+   
+   <!-- link dataTable js file -->
+   <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="/resources/js/sweetalert.js"></script>
+
+    
+
+   
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"><i class="fa-solid  fa-1x"></i> Prescription Management</h2>
+            </div>
+        </div>
+       </div>
+
+
+        <div class="row mt-3">
+            <div class="col-1"></div>
+            <div class="col-6 mb-2">
+                <ul class="nav nav-pills ms-2 "  >
+
+                    <li class="nav-item " style="border-color: #0a53be" >
+                         <a class="nav-link active "    data-bs-toggle="tab" href="#PrescriptionTable"><i class="fa-solid fa-outdent me-3"></i> Prescription Table</a>
+
+                    </li>
+
+                    <li class="nav-item" style="border-color: #0a53be">
+                        <a class="nav-link "  data-bs-toggle="tab" href="#PrescriptionForm"  ><i class="fa-regular fa-pen-to-square me-3"></i> Prescription Form </a>
+
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-1"></div>
+            <div class="col-3 mb-2 text-end" >
+                <ul class="nav nav-pills ms-3 ">
+                    <li class="nav-item " style="border-color: #0a53be">
+                        <button type="button" class="btn btn-info me-3" onclick="printCompleteTable()" style="color: white">Print Prescription Table</button>
+                    </li>
+                </ul>
+
+            </div>
+<!--            <div class="col-1"></div>-->
+        </div>
+
+        <div class="tab-content" >
+            <div class="tab-pane fade " id="PrescriptionForm">
+                <!--  form start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <div class="card form-area ">
+                            <div class="card-body ">
+
+                                <div class="row mt-3">
+
+                                    <div class="col-1"></div>
+                                    <div class="col-6 mt-3  ">
+
+                                        <h2 class=" mt-3 align-center" id="Title"> New Prescription Enrollment</h2>
+
+
+                                    </div>
+                                    <div class="col-3 text-center mt-3">
+                                    </div>
+
+                                    <div class="col-1  mt-3 align-middle text-center">
+                                        <button class="btn btn-primary" id="freshBtn" onclick="refreshFormByuserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>
+
+
+                                    <div class="row">
+
+                                        <div class="col-12 form-area mt-2">
+
+
+
+                                            <hr class="hr mb-3" />
+
+                                            <!-- form area start -->
+
+                                            <form action="" onsubmit="return false">
+                                                <!-- reqired field -->
+                                                <div class="row">
+                                                    <div class="col-12 text-end  ">
+
+                                                        <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- reqired field end  -->
+
+                                                <div class="row mt-2 mb-3">
+                                                    <div class="col-4">
+                                                        <!-- Appointment and Age field start -->
+                                                        <div class="row mt-2 mb-2">
+                                                            <div class="form-group ">
+                                                                <label for="selectAppointment" class="fw-bold form-label"> Appointment <span class="text-danger">*</span></label>
+                                                                <select id="selectAppointment" class="form-select" required
+                                                                        onchange="dropDownValidationD(selectAppointment,'','prescription','appointment_id');calculateAge()">
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-2 mb-2">
+                                                            <div class="form-group ">
+                                                                <label for="textAge" class="fw-bold form-label">Age <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" id="textAge" required placeholder="Age"
+                                                                       onkeyup="textFieldValiation(textAge,'^$','prescription','age')">
+                                                            </div>
+                                                        </div>
+                                                        <!-- Appointment and Age field end -->
+
+                                                        <div class="row mt-2 mb-2">
+                                                            <div class="form-group">
+                                                                <label for="textNote" class="fw-bold">Note </label>
+                                                                <textarea type="text" class="form-control" id="textNote" placeholder="Enter Note"
+                                                                          onkeyup="textFieldValiation(textNote,'^.*$','prescription','docnote')"
+                                                                ></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+<!--                                                    inner form and inner table-->
+<!--                                                    drug name-->
+                                                    <div class="col-8">
+                                                        <div class="row mt-2 mb-2">
+                                                            <label for="txtSalesDrug" class="fw-bold form-label">Drug <span class="text-danger">*</span></label>
+
+                                                            <input type="text" id="txtSalesDrug" class="form-control" list="datalistitems" placeholder="Select Drug" required
+                                                                   onkeyup="DataListValidationD(txtSalesDrug,'salesdrugListData','salesdruglist','salesdrug_id','name');getAvailableQty();checkDrugInTable()">
+                                                            <datalist id="datalistitems">
+
+                                                            </datalist>
+
+                                                            <span class="text-muted mb-0" id="tdavailQty"></span>
+
+                                                        </div>
+<!--morning lunch dinner qty-->
+                                                        <div class="row mt-2 mb-2">
+                                                            <div class="col-3">
+                                                                <label for="textBreakFastQty" class="fw-bold form-label">Morning </label>
+                                                                <input type="text" class="form-control" id="textBreakFastQty"  placeholder="Enter Morning Qty"
+                                                                       onkeyup="textFieldValiation(textBreakFastQty,'^[1-5]{1}$','salesdruglist','breakfastqty');"    >
+                                                            </div>
+                                                            <div class="col-3">
+                                                                <label for="textLunchQty" class="fw-bold form-label">Afternoon</label>
+                                                                <input type="text" class="form-control" id="textLunchQty"  placeholder="Enter Afternoon Qty"
+                                                                       onkeyup="textFieldValiation(textLunchQty,'^[1-5]{1}$','salesdruglist','lunchqty');">
+                                                            </div>
+                                                            <div class="col-3">
+                                                                <label for="textDinnerQty" class="fw-bold form-label">Night</label>
+                                                                <input type="text" class="form-control" id="textDinnerQty"    placeholder="Enter Night Qty"
+                                                                       onkeyup="textFieldValiation(textDinnerQty,'^[1-5]{1}$','salesdruglist','dinnerqty'); ">
+                                                            </div>
+                                                            <div class="col-3">
+                                                                <label for="textDaysCount" class="fw-bold form-label">Days Count <span class="text-danger">* </span></label>
+                                                                <input type="text" class="form-control" id="textDaysCount" required placeholder="Enter days"
+                                                                       onkeyup="textFieldValiation(textDaysCount,'^([1-9]|[1-9]\\d|1\\d\\d|2\\d\\d|3[0-5]\\d|36[0-5])$','salesdruglist','noofdays');calculatetotalquantity();checktotalQtyandAvilableQty()"    >
+                                                            </div>
+
+
+
+
+
+                                                        </div>
+<!--                                                        total qty meal time pharamcy type-->
+                                                        <div class="row mt-2 mb-2">
+                                                            <div class="col-4">
+                                                                <label for="textTotalQty" class="fw-bold form-label">Total Quantity <span class="text-danger">* </span></label> <button data-toggle="tooltip" data-placement="top" title="Edit" onclick="textTotalQty.disabled=false"><i class="far fa-edit"></i></button>
+                                                                <input type="text" class="form-control" id="textTotalQty" required  disabled  placeholder="auto-calculated"
+                                                                       onkeyup="textFieldValiation(textTotalQty,'^[1-9][0-9]{0,1}$','salesdruglist','totalqty');checktotalQtyandAvilableQty() ">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label for="textBFMeals" class="fw-bold form-label"> Before/After Meals </label>
+                                                                <select id="textBFMeals" class="form-select"
+                                                                        onchange="dropDownValidation(textBFMeals,'','salesdruglist','eatbeforeorafter');checkDrugInTable()">
+                                                                    <option value="" selected disabled>Select Consume Time</option>
+                                                                    <option value="Before">Before Meals</option>
+                                                                    <option value="After">After Meals</option>
+                                                                </select>
+
+                                                            </div>
+<!--                                                            pharmcay type-->
+                                                            <div class="col-4 mt-4">
+                                                                <div class="form-check form-switch">
+                                                                    <input class="form-check-input" type="checkbox" id="CheckBoxPharmacy" checked
+                                                                           onchange="checkboxValidation(CheckBoxPharmacy,'salesdruglist','inpharmacyoroutside',true,false,checkPharmaVal,' In-House Pharmacy','External Pharmacy');checktotalQtyandAvilableQty();checkDrugInTable()">
+                                                                    <label class="form-check-label" checked for="CheckBoxPharmacy" id="checkPharmaVal">In-House Pharmacy</label>
+                                                                </div>
+<!--                                                                <div class="form-check">-->
+<!--                                                                    <label class="form-check-label" ></label>-->
+<!--                                                                    <input class="form-check-input" type="checkbox" checked id="CheckBoxPharmacy"-->
+<!--                                                                           onchange="checkboxValidation(CheckBoxPharmacy,'salesdruglist','inpharmacyoroutside',true,false,checkPharmaVal,' In-House Pharmacy','External Pharmacy');checktotalQtyandAvilableQty();checkDrugInTable()">-->
+<!--                                                                    <label class="form-check-label" for="CheckBoxPharmacy"  id="checkPharmaVal">-->
+<!--                                                                        In-House Pharmacy-->
+<!--                                                                    </label>-->
+<!--                                                                </div>-->
+                                                            </div>
+
+                                                        </div>
+<!--                                                        inner table button-->
+                                                        <div class="row mt-2 mb-2 ">
+                                                            <div class="col-8"></div>
+                                                            <div class="col-4 text-end">
+                                                                <button type="button" class="btn btn-success buttons" id="btnInnerForm"  onclick="btnInnerformAdd()"><i class="fas fa-save"></i> Add</button>
+
+                                                            </div>
+
+                                                        </div>
+<!--                                                        inner table-->
+                                                        <div class="row mt-3 mb-2">
+                                                            <table class="table table-sm table-dark" id="salesiteminnertable">
+                                                                <thead >
+                                                                <tr>
+
+                                                                    <th>#</th>
+                                                                    <th class="text-center">Drug</th>
+                                                                    <th>Bf Qty</th>
+                                                                    <th>Ln Qty</th>
+                                                                    <th>Dn Qty</th>
+                                                                    <th>Days</th>
+                                                                    <th>Total Qty</th>
+                                                                    <th>B/A Meal</th>
+                                                                    <th>Pharmacy</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+<!--                                                button field start-->
+                                                <div class="row mt-5 mb-3">
+                                                    <div class="col-4 text-start">
+                                                        <button type="button" class="btn btn-danger buttons btn-clear" onclick="buttonClear()" >
+<!--                                                               -->
+                                                        <i class="fa-solid fa-trash text-end"></i> CLEAR</button>
+                                                    </div>
+                                                    <div class="col-8 text-end">
+                                                        <button type="button" class="btn btn-warning buttons" id="btnUpdate"   onclick="buttonPresUpdate()"><i class="fas fa-edit"></i> UPDATE</button>
+                                                        <button type="button" class="btn btn-success buttons" id="btnAdd"  onclick="buttonPresAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                                    </div>
+                                                </div>
+<!--                                                button field end-->
+                                            </form>
+
+
+
+
+                                        </div>
+
+
+
+
+                                    </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                    <!--  form end -->
+                </div>
+            </div>
+            <div class="tab-pane fade show active" id="PrescriptionTable" >
+                <!--  table start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10  ">
+                        <div class="card table-area p-2" >
+                            <table class="table table-hover" id="tablePrescription">
+                                <thead >
+                                <tr>
+                                    <th>#</th>
+                                    <th>code</th>
+                                    <th> Patient</th>
+                                    <th>Appointment No</th>
+                                    <th>Channelling Date</th>
+                                    <th>Appointment Time</th>
+
+                                    <th class="btn-display">Action</th>
+
+                                </tr>
+
+                                </thead>
+                                <tbody >
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!--  table end -->
+
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-5">
+            <div class="col-1"></div>
+            <div class="col-10 ">
+
+            </div>
+            <div class="col-1 text-end ">
+
+            </div>
+
+        </div>
+
+
+       
+    
+
+
+    </div>
+
+<!--print  details-->
+  <div class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>view details</h2>
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+<!--print complete drug list-->
+                <div class="col-md-12" id="printPrescriptionTable">
+                    <div class="card m-1">
+                        <div class="card-body " >
+                            <div class="row">
+                                <div class="col-2" ></div>
+                                <div class="col-3 " >
+                                    <img src="/resources/images/Suwa-setha-3.png" alt="picture-of-suwasetha" class="rounded float-end" width="50px" height="50px">
+                                </div>
+                                <div class="col-5 mb-1">
+                                    <h1 class="text-start" >Prescription Details</h1>
+
+                                </div>
+                                <div class="col-2" ></div>
+
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-5"  >
+                                    <p class="mb-0">
+                                        <span > Prescription No : </span>
+                                        <span class="text-muted mb-0" id="tdPrescriptionNoOb"></span>
+
+                                    </p>
+                                </div>
+                                <div class="col-2 d-flex justify-content-center align-items-center" >
+                                </div>
+                                <!--                                vetical line-->
+                                <div class="col-5">
+
+                                    <p class="mb-0">
+                                        <span > Appointment No : </span>
+                                        <span class="text-muted mb-0" id="tdAppNoOb"></span>
+
+                                    </p>
+
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> Doctor Name : </span>
+                                        <span class="text-muted mb-0" id="tdDoctorNameOb"> </span>
+                                    </p>
+                                </div>
+
+                                <div class="col-2 d-flex justify-content-center align-items-center" >
+                                </div>
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> Patient Name : </span>
+                                        <span class="text-muted mb-0" id="tdPatientNameOb"> </span><br>
+                                        <span> Age : </span>
+                                        <span class="text-muted mb-0" id="tdPatientAge"> </span>
+                                    </p>
+                                </div>
+
+                            </div>
+                            <hr>
+
+                            <div class="row">
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> ChannellingDate : </span>
+                                        <span class="text-muted mb-0" id="tdChannellingDate"> </span><br>
+                                        <span> Session Time : </span>
+                                        <span class="text-muted mb-0" id="tdSessionTime"> </span>
+                                    </p>
+                                </div>
+
+                                <div class="col-2 d-flex justify-content-center align-items-center" >
+                                </div>
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> Appointment Status : </span>
+                                        <span class="text-muted mb-0" id="tdAppStatus"> </span>
+                                    </p>
+                                </div>
+
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-12">
+                                    <p class="mb-0">
+                                        <span> Note : </span>
+                                        <span class="text-muted mb-0" id="tdNote"> </span>
+                                    </p>
+                                </div>
+
+
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> Added DateTime : </span>
+                                        <span class="text-muted mb-0" id="tdAddedDateTime"> </span>
+                                    </p>
+                                </div>
+
+                                <div class="col-2 d-flex justify-content-center align-items-center" >
+                                </div>
+
+                                <div class="col-5">
+
+                                </div>
+
+                            </div>
+                            <hr>
+
+                            <div class="row" style="background-color: darkgray">
+                                <div class="col-12 d-flex justify-content-center align-items-center">
+                                    <p><span style="font-size: 20px"> Drug List </span></p>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-2"></div>
+                                <div class="col-8">
+                                    <table class="table table-striped table-hover table-bordered" id="printinnertable">
+                                        <thead >
+                                        <tr>
+
+                                            <th>#</th>
+                                            <th class="text-center">Drug</th>
+                                            <th>Quantity For Breakfast</th>
+                                            <th>Quantity For Lunch</th>
+                                            <th>Quantity For Dinner</th>
+                                            <th>Before/After Meal</th>
+                                            <th>No of Days</th>
+                                            <th>In-House/External</th>
+                                        </tr>
+
+                                        </thead>
+                                        <tbody >
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <div class="col-2"></div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+<!--                print the drug list for external-->
+                <div class="col-md-12" id="printExternalDrugListTable">
+                    <div class="card m-1">
+                        <div class="card-body " >
+                            <div class="row">
+                                <div class="col-2" ></div>
+                                <div class="col-3 " >
+                                    <img src="/resources/images/Suwa-setha-3.png" alt="picture-of-suwasetha" class="rounded float-end" width="50px" height="50px">
+                                </div>
+                                <div class="col-5 mb-1">
+                                    <h5 class="text-start" >Drugs to Buy in External/Other Pharmacy</h5>
+
+                                </div>
+                                <div class="col-2" ></div>
+
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-5"  >
+                                    <p class="mb-0">
+                                        <span > Doctor Name : </span>
+                                        <span class="text-muted mb-0" id="tdDoctorName"></span>
+
+                                    </p>
+                                </div>
+                                <div class="col-2 d-flex justify-content-center align-items-center" >
+                                </div>
+                                <!--                                vetical line-->
+                                <div class="col-5">
+
+                                    <p class="mb-0">
+                                        <span > Patient Name : </span>
+                                        <span class="text-muted mb-0" id="tdPatientName"></span>
+
+                                    </p>
+
+                                </div>
+                            </div>
+                            <hr>
+
+
+
+                            <div class="row">
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> Doctor Note : </span>
+                                        <span class="text-muted mb-0" id="tdDocNoteForExt"> </span>
+                                    </p>
+                                </div>
+
+                                <div class="col-2 d-flex justify-content-center align-items-center" >
+                                </div>
+
+
+                            </div>
+                            <hr>
+
+                            <div class="row" style="background-color: darkgray">
+                                <div class="col-12 d-flex justify-content-center align-items-center">
+                                    <p><span style="font-size: 20px"> Drug List </span></p>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-2"></div>
+                                <div class="col-8">
+                                    <table class="table table-striped table-hover table-bordered" id="printExternalDrugInnerTable">
+                                        <thead >
+                                        <tr>
+
+                                            <th>#</th>
+                                            <th class="text-center">Drug</th>
+                                            <th>Quantity For Breakfast</th>
+                                            <th>Quantity For Lunch</th>
+                                            <th>Quantity For Dinner</th>
+                                            <th>Before/After Meal</th>
+                                            <th>No of Days</th>
+                                        </tr>
+
+                                        </thead>
+                                        <tbody >
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <div class="col-2"></div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+      <!-- table function  js-->
+      <script src="resources/js/tablefunction.js"></script> 
+      <!-- common function  js -->
+      <script src="resources/js/common.js"></script>
+      <!--validation files  -->
+
+      <script src="resources/js/validation.js"></script>
+        <!-- emp js -->
+        <script src="resources/controllerjs/Prescription.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+</body>
+</html>

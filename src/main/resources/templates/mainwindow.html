@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{head :: headFragment}">
+
+
+</head>
+
+
+<body>
+<!--top nav bar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+
+
+
+
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+
+
+<!--<div class="container-fluid" style="margin-top: 80px;" >-->
+
+<!--    <div class="row"  >-->
+<!--        <div class="col-12" >-->
+<!--            <div class="card mt-4">-->
+<!--                <div class="card-body ">-->
+<!--                    <h5 class="card-title fw-semibold mb-4">Quick Access</h5>-->
+<!--                    <div class="row">-->
+<!--&lt;!&ndash;patient&ndash;&gt;-->
+<!--                        <div class="col-1 text-start" th:if="${rolename == 'Manager' || rolename == 'Admin'|| rolename=='Medical Receptionist'}">-->
+<!--                            <button >-->
+<!--                                <a href="/patient">-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/7.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+<!--&lt;!&ndash;                        doctor availability&ndash;&gt;-->
+<!--                        <div class="col-1 text-start" th:if="${rolename == 'Manager' || rolename == 'Admin'|| rolename=='Medical Receptionist'}">-->
+<!--                            <button >-->
+<!--                                <a href="/doctoravailability">-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/8.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+<!--&lt;!&ndash;                        appointment&ndash;&gt;-->
+<!--                        <div class="col-1 text-start" th:if="${rolename == 'Manager' || rolename == 'Admin' || rolename=='Medical Receptionist'}">-->
+<!--                            <button >-->
+<!--                                <a href="/appointment">-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/appointment_btn_img.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+
+<!--&lt;!&ndash;                        appointment payment&ndash;&gt;-->
+<!--                        <div class="col-1 text-start" th:if="${rolename == 'Manager' || rolename == 'Admin' || rolename=='Medical Receptionist'}">-->
+<!--                            <button >-->
+<!--                                <a href="/appointmentpayment">-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/appointment_pay_btn_img.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+<!--&lt;!&ndash;                        prescription&ndash;&gt;-->
+<!--                        <div class="col-1 text-start" th:if="${rolename == 'Doctor'  || rolename == 'Admin'}">-->
+<!--                            <button >-->
+<!--                                <a href="/prescription">-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/prescription_btn_img.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+<!--&lt;!&ndash;                        prescription payment&ndash;&gt;-->
+<!--                        <div class="col-1 text-start" th:if="${rolename == 'Manager' || rolename == 'Admin' || rolename=='Cashier' || rolename=='Pharmacist'}">-->
+<!--                            <button >-->
+<!--                                <a href="/prescriptionpayment">-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/prescription_pay_btn_img.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+<!--&lt;!&ndash;                        sales item&ndash;&gt;-->
+<!--                        <div class="col-1 text-start" th:if="${rolename == 'Manager' || rolename == 'Admin'}">-->
+<!--                            <button >-->
+<!--                                <a href="/salesdrug">-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/salesitem_btn_img.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+<!--&lt;!&ndash;                        supplier&ndash;&gt;-->
+<!--                        <div class="col-1 text-start" th:if="${rolename == 'Manager' || rolename == 'Admin'}">-->
+<!--                            <button >-->
+<!--                                <a href="/supplier">-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/supplier_btn_img.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+<!--&lt;!&ndash;                        purchase order&ndash;&gt;-->
+<!--                        <div class="col-1 text-start" th:if="${rolename == 'Manager' || rolename == 'Admin'}">-->
+<!--                            <button >-->
+<!--                                <a href="/purchaseorder">-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/purchaseorder_btn_img.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+<!--&lt;!&ndash;                      supplier payment&ndash;&gt;-->
+<!--                        <div class="col-1 text-start" th:if="${rolename == 'Manager' || rolename == 'Admin'}">-->
+<!--                            <button >-->
+<!--                                <a href="/supplierpayment" >-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/supplierpayment_btn_img.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+<!--&lt;!&ndash;                        employee&ndash;&gt;-->
+<!--                        <div class="col-1 text-start"  th:if="${rolename == 'Manager' || rolename == 'Admin'}">-->
+<!--                            <button >-->
+<!--                                <a href="/employee" >-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/employee_btn_img.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+<!--&lt;!&ndash;                        report&ndash;&gt;-->
+<!--                        <div class="col-1 text-start" th:if="${rolename == 'Manager' || rolename == 'Admin'}">-->
+<!--                            <button >-->
+<!--                                <a href="/report">-->
+<!--                                    <div class="card" style="width: 5rem;">-->
+<!--                                        <img class="card-img-top" src="/resources/images/report.png" alt="Card image cap">-->
+
+<!--                                    </div>-->
+
+<!--                                </a>-->
+
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+
+
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </div>-->
+
+
+
+<!--</div>-->
+<div class="container-fluid" style="margin-top: 80px;">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-semibold mb-4">Quick Access</h5>
+                    <div class="row">
+                        <!-- patient -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Medical Receptionist')}">
+                            <button>
+                                <a href="/patient">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/7.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+
+                        <!-- doctor availability -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Medical Receptionist')}">
+                            <button>
+                                <a href="/doctoravailability">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/8.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+
+                        <!-- appointment -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Medical Receptionist')}">
+                            <button>
+                                <a href="/appointment">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/appointment_btn_img.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+
+                        <!-- appointment payment -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Medical Receptionist')}">
+                            <button>
+                                <a href="/appointmentpayment">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/appointment_pay_btn_img.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+
+                        <!-- prescription -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Doctor') || roles.contains('Admin')}">
+                            <button>
+                                <a href="/prescription">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/prescription_btn_img.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+
+                        <!-- prescription payment -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Manager') || roles.contains('Admin') || roles.contains('Cashier') || roles.contains('Pharmacist')}">
+                            <button>
+                                <a href="/prescriptionpayment">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/prescription_pay_btn_img.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+
+                        <!-- sales item -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                            <button>
+                                <a href="/salesdrug">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/salesitem_btn_img.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+
+                        <!-- supplier -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                            <button>
+                                <a href="/supplier">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/supplier_btn_img.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+
+                        <!-- purchase order -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                            <button>
+                                <a href="/purchaseorder">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/purchaseorder_btn_img.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+
+                        <!-- supplier payment -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                            <button>
+                                <a href="/supplierpayment">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/supplierpayment_btn_img.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+
+                        <!-- employee -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                            <button>
+                                <a href="/employee">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/employee_btn_img.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+
+                        <!-- report -->
+                        <div class="col-1 text-start" th:if="${roles.contains('Manager') || roles.contains('Admin')}">
+                            <button>
+                                <a href="/report">
+                                    <div class="card" style="width: 5rem;">
+                                        <img class="card-img-top" src="/resources/images/report.png" alt="Card image cap">
+                                    </div>
+                                </a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional content here -->
+
+    <div class="row">
+        <!-- Doctor List -->
+        <div class="col-6"  th:if="${roles.contains('Manager') || roles.contains('Admin')  ||roles.contains('Medical Receptionist')}">
+            <div class="card mt-4">
+                <div class="card-body ">
+                    <div class="row mb-4">
+                        <div  class="card-title col-6  ">
+                            <h5 class="fw-semibold"> Doctor Available List for today </h5>
+                        </div>
+                        <div  class="card-title col-6 text-end">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCheckDoctorAvailability" >Check Availability</button>
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <table class="table table-hover" id="tableDoctorListDashboard">
+                            <thead class="text-start">
+                            <tr>
+                                <th>#</th>
+                                <th>Doctors Name</th>
+                                <th>Date</th>
+                                <th>Start time </th>
+                                <th>End time</th>
+                            </tr>
+
+                            </thead>
+                            <tbody class="text-start">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- pending appointments for doctor-->
+        <div class="col-6"  th:if="${roles.contains('Doctor') || roles.contains('Admin') }">
+            <div class="card mt-4">
+                <div class="card-body ">
+                    <div class="row mb-4">
+                        <div  class="card-title col-6  ">
+                            <h5 class="fw-semibold">Pending  Appointment </h5>
+                        </div>
+                        <div  class="card-title col-6 text-end" >
+                            <button class="btn btn-primary"><a href="/prescription" style="color: white">Prescription</a></button>
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <table class="table table-hover" id="tableAppointment">
+                            <thead class="text-start">
+                            <tr>
+                                <th>#</th>
+                                <th>Appointment No </th>
+                                <th>Patient Name</th>
+                                <th>Doctor Name</th>
+                                <th>Appointment Time</th>
+                            </tr>
+
+                            </thead>
+                            <tbody class="text-start">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <!-- Pending Orders -->
+        <div class="col-12" th:if="${roles.contains('Manager') || roles.contains('Admin') }">
+            <div class="card mt-4">
+                <div class="card-body ">
+                    <div class="row mb-4">
+                        <div  class="card-title col-6  ">
+                            <h5 class="fw-semibold"> Pending Purchasing Orders</h5>
+                        </div>
+                        <div  class="card-title col-6 ">
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <table class="table table-hover" id="tablePendingOrders">
+                            <thead class="text-center">
+                            <tr>
+                                <th>#</th>
+                                <th>Order Code </th>
+                                <th>Supplier Name</th>
+                                <th>Required Date</th>
+                                <th>Total Amount</th>
+
+
+                            </tr>
+
+                            </thead>
+                            <tbody class="text-center align-middle">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <button class="btn btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-10 form-area mt-2">
+
+                            <div class="row ">
+                                <div class="col-12 text-end">
+
+                                </div>
+                            </div>
+
+
+
+                            <hr class="hr mb-3" />
+                            <div class="row mt-2">
+                                <div class="col-1"></div>
+                                <div class="col-10"th:if="${roles.contains('Manager') || roles.contains('Admin') }">
+                                    <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                    <table class="table table-hover" id="tableExpiringDrugs"  >
+                                        <thead class="text-center">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name </th>
+                                            <th>Batch</th>
+                                            <th>Expire Date</th>
+                                            <th>Avaiable Qty</th>
+
+
+                                        </tr>
+
+                                        </thead>
+                                        <tbody class="text-center align-middle">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+
+
+
+
+                        </div>
+                        <div class="col-1"></div>
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<!--doctor availability  check modal-->
+<div class="modal" id="modalCheckDoctorAvailability" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 mt-2">
+
+                        <div class="row mt-2 mb-2">
+                            <div class="col-3">
+                                <div class="form-group ">
+                                    <label for="selectDoctorName" class="fw-bold form-label">Doctor <span class="text-danger">*</span></label>
+                                    <select  id="selectDoctorName" class="form-select" required>
+
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="col-3">
+                                <div class="form-group ">
+                                    <label for="selectDate" class="fw-bold form-label">Date <span class="text-danger">*</span></label>
+                                    <input type="date" id="selectDate" class="form-control">
+                                </div>
+
+                            </div>
+
+                            <div class="col-6  mt-4">
+                                <button type="submit" class="btn btn-success buttons" id="btnAdd" onclick="btnDoctorAvailabilityCheck()">Check</button>
+
+                            </div>
+                      </div>
+
+
+                        <div class="row mt-2">
+                            <div class="card table-area p-2" >
+                                <table class="table table-hover" id="tableDoctorAvailability">
+                                    <thead >
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Date</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Available Appointment Slots</th>
+                                        <th class="btn-display">Action</th>
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody >
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--doctor availability  check modal end-->
+
+
+</body>
+
+
+<!-- table function  js-->
+<script src="resources/js/tablefunction.js"></script>
+
+<!-- common function  js -->
+<script src="resources/js/common.js"></script>
+
+<!--<script src="/resources/js/chart.js"></script>-->
+<script src="resources/controllerjs/dashboard.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+<!--<script>-->
+<!--    const hamBurger = document.querySelector(".toggle-btn");-->
+
+<!--    hamBurger.addEventListener("click", function () {-->
+<!--        document.querySelector("#sidebar").classList.toggle("expand");-->
+<!--    });-->
+<!--</script>-->
+
+
+</html>

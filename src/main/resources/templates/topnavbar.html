@@ -1,0 +1,59 @@
+<!--navbar-->
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light navbar-color fixed-top navcolor" aria-label="breadcrumb" th:fragment="topNavBarFragment">
+
+    <div class="d-flex justify-content-between">
+        <button class="btn btn-info m-1 btn_navbar" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasExample">
+            <i class="fa-solid fa-grip-lines navbar_button_icon"></i>
+        </button>
+
+
+
+        <ol class="breadcrumb   m-3">
+            <li class="breadcrumb-item  " aria-current="page"><a href="/dashboard" ><span class="txtcolorBrdCrmb">Dashboard</span> </a></li>
+            <li class="breadcrumb-item active " aria-current="page"><span class="txtcolorBrdCrmb" th:text="${modulename}"></span></li>
+
+
+        </ol>
+
+    </div>
+
+    <div class="navbar-collapse justify-content-end" >
+        <ul class="navbar-nav flex-row  align-items-center justify-content-end">
+            <li class="nav-item ">
+                <a class="nav-link nav-icon-hover" href="javascript:void(0)" onclick="showNotofications()" data-bs-toggle="modal" data-bs-target="#modalNotification">
+                    <i class="fa-regular fa-bell ringing-bell txtcolorBrdCrmb"></i>
+                    <div class="notification bg-primary rounded-circle"></div>
+                </a>
+            </li>
+            <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+                <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <img src="/resources/images/user2.jpg" alt="" width="35" height="35" class="rounded-circle" id="userImgTopBar">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                            <div class="message-body">
+                                <a href="/profile" target="_blank" class="d-flex align-items-center gap-2 dropdown-item">
+
+                                    <p class="mb-0 ">My Profile</p>
+                                </a>
+
+                                <a href="http://localhost:8080/logout" class="btn btn-outline-primary mx-3 mt-2 d-block shadow-none">Logout</a>
+<!--                                <a type="button" onclick="logoutconfirm()" class="btn btn-outline-primary mx-3 mt-2 d-block shadow-none">Logout</a>-->
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </ul>
+    </div>
+
+
+</nav>
+

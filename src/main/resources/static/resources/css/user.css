@@ -1,0 +1,62 @@
+/*body{*/
+/*    background-image: url(../images/employee.jpg);*/
+/*    background-repeat: no-repeat;*/
+/*    background-size: cover;*/
+/*}*/
+.title-div{
+    height: 50px;
+    padding: 10px;
+    background-color: rgba(110, 100, 150, 0.1);
+}
+/* .form-area{
+   
+    background-color: rgba(82, 212, 195, 0.219);
+} */
+.buttons{
+    
+    border-radius: 10px;
+}
+.table-area{
+    background-color: rgb(240, 252, 250);
+    border-radius: 10px;
+   
+}
+.table-head{
+    background-color: black;
+    color: aliceblue;
+}
+
+.btnsave,.btnedit,.btndelete{
+    border: white 2px;
+    border-radius: 10px;
+}
+.btnsave:hover{
+   color: green;
+   
+}
+.btnedit:hover{
+    color: yellow;
+ }
+ .btndelete:hover{
+    color: red;
+ }
+ .active-status{
+    background-color: green;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    padding: 2px;
+    font-weight: bold;
+     width: 60px;
+ }
+
+ .inactive-status{
+    background-color: red;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    padding: 2px;
+    font-weight: bold;
+     width: 80px;
+ }
+ 

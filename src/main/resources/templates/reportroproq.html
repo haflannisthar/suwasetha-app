@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+     <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+    <script src="/resources/js/sweetalert.js"></script>
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+
+
+
+
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"> ROP-ROQ Reports</h2>
+            </div>
+        </div>
+      </div>
+
+        <div class="row mt-3">
+            <div class="col-1"></div>
+            <div class="col-6 mb-2">
+                <ul class="nav nav-pills ms-2 "  >
+
+                    <li class="nav-item " style="border-color: #0a53be" >
+                        <a class="nav-link active "   data-bs-toggle="tab" href="#RopTable"><i class="fa-solid fa-outdent me-3"></i>ROP Report</a>
+
+                    </li>
+
+                    <li class="nav-item" style="border-color: #0a53be">
+                        <a class="nav-link "  data-bs-toggle="tab" href="#RoqTable"  ><i class="fa-regular fa-pen-to-square me-3"></i>ROQ Report</a>
+
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-2"></div>
+
+        </div>
+
+        <div class="tab-content " >
+            <div class="tab-pane fade show active " id="RopTable">
+                <div class="row mt-3 mb-2">
+                    <div class="col-1"></div>
+                    <div class="col-3">
+
+                        <select class="form-select" id="selectRopDrugName"  required>
+
+                        </select>
+
+                    </div>
+                    <div class="col-2">
+                        <input type="date" id="selectRopStartDate" class="form-control">
+
+                    </div>
+
+                    <div class="col-2">
+                        <input type="date" id="selectRopEndDate" class="form-control">
+
+                    </div>
+
+                    <div class="col-4">
+
+                        <button type="button" class="btn btn-info me-3" onclick="generatereRopreports()" style="color: white">Generate</button>
+                        <button type="button" class="btn btn-success me-3" onclick="printRopCompleteTable()" style="color: white">Print Table</button>
+                        <button type="button" class="btn btn-success me-3" onclick="printRopChart()" style="color: white">Print chart</button>
+
+                    </div>
+
+
+                </div>
+
+
+                <!--  table start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-5  ">
+                        <div class="card mt-4">
+                            <div class="card-body ">
+                                <div class="row mb-4">
+                                    <p class="mb-4 mt-1 text-center fw-bold" > Drug/Item Sales Quantity By Month </p>
+                                    <p class="mb-4 mt-1 text-center fw-bold" id="ropDrugTitle"> </p>
+
+                                    <div class="card table-area p-2">
+                                        <table class="table table-hover display" id="ropDetailsTable">
+                                            <thead  >
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Month</th>
+                                                <th>Sales Quantity</th>
+
+
+
+                                            </tr>
+
+                                            </thead>
+                                            <tbody >
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-sm-9 text-end">
+                                            <p class="mb-0 text-end">Average Sales Quantity</p>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p class="text-muted mb-0" id="averageRopQuantity"></p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <button class="btn btn-primary" id="ropUpdateBtn" onclick="updateROPSalesItem()">Update Sales Item ROP</button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-5">
+                        <div class="card  p-2">
+                        <canvas id="ropChart" width="400" height="200"></canvas>
+
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!--  table end -->
+
+
+
+
+
+            </div>
+        </div>
+
+
+
+<!--        roq-->
+        <div class="tab-content" >
+            <div class="tab-pane fade " id="RoqTable">
+
+                <div class="row mt-3 mb-2">
+                    <div class="col-1"></div>
+                    <div class="col-3">
+
+                        <select class="form-select" id="selectRoqDrug"  required>
+
+                        </select>
+
+                    </div>
+                    <div class="col-2">
+                        <input type="date" id="selectRoqStartDate" class="form-control">
+
+                    </div>
+
+                    <div class="col-2">
+                        <input type="date" id="selectRoqEndDate" class="form-control">
+
+                    </div>
+
+                    <div class="col-4">
+
+                        <button type="button" class="btn btn-info me-3" onclick="generateRoqReports()" style="color: white">Generate</button>
+                        <button type="button" class="btn btn-success me-3" onclick="printRoqCompleteTable()" style="color: white">Print Table</button>
+                        <button type="button" class="btn btn-success me-3" onclick="printRoqChart()" style="color: white">Print Chart</button>
+
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-5">
+                        <div class="card mt-4">
+                            <div class="card-body ">
+                                <div class="row mb-4">
+                                    <p class="mb-4 mt-1 text-center fw-bold" > Drug/Item Ordered Quantity By Month </p>
+                                    <p class="mb-4 mt-1 text-center fw-bold" id="roqDrugTitle"> </p>
+                                    <div class="card table-area p-2">
+                                        <table class="table table-hover display" id="roqDetailsTable">
+                                            <thead  >
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Month</th>
+                                                <th>Quantity</th>
+
+
+
+                                            </tr>
+
+                                            </thead>
+                                            <tbody >
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-sm-9 text-end">
+                                            <p class="mb-0 text-end">Average Ordered Quantity</p>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p class="text-muted mb-0" id="averageRoqQuantity"></p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                       <button class="btn btn-primary" id="roqUpdateBtn" onclick="updateROQSalesItem()">Update Sales Item ROQ</button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-5">
+                        <div class="card mt-4">
+                            <div class="card-body ">
+                                <div class="row mb-4">
+                                    <canvas id="roqChart" width="400" height="200"></canvas>
+
+
+
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+
+        </div>
+
+
+    </div>
+
+
+<!--        chart print-->
+        <div class="row"  style="display: none;">
+            <div class="col-1"></div>
+            <div class="col-10 text-center">
+                <img id="chartPrintRoqChart"  width="400" height="400" >
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <div class="row" style="display: none;">
+            <div class="col-12">
+                <img id="chartPrintRopChart" width="400" height="400" >
+            </div>
+
+        </div>
+
+
+</div>
+
+
+
+
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- common function  js -->
+<script src="resources/js/common.js"></script>
+
+<!-- table function  js-->
+<script src="resources/js/tablefunction.js"></script>
+
+<!-- chart function  js-->
+<script src="resources/js/chart.js"></script>
+
+<!-- emp js -->
+<script src="resources/controllerjs/reportroproq.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+   
+</body>
+</html>

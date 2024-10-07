@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+    <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+
+    <!-- css -->
+    <link rel="stylesheet" href="../resources/css/employee.css">
+    <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+
+    <!-- link datatTable css file -->
+    <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+
+    <!-- link dataTable js file -->
+    <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="/resources/js/sweetalert.js"></script>
+
+
+
+
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+<div class="container-fluid " style="margin-top: 80px">
+    <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"><i class="fa-solid  fa-1x"></i> User Management</h2>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row mt-3">
+        <div class="col-1"></div>
+        <div class="col-6 mb-2">
+            <ul class="nav nav-pills ms-2 " >
+
+                <li class="nav-item" >
+                    <a class="nav-link active "   data-bs-toggle="tab" href="#UserTable"><i class="fa-solid fa-outdent me-3"></i> User Table</a>
+
+                </li>
+
+                <li class="nav-item" >
+                    <a class="nav-link "  data-bs-toggle="tab" href="#UserForm"  ><i class="fa-regular fa-pen-to-square me-3"></i> User Form </a>
+
+                </li>
+
+            </ul>
+        </div>
+        <div class="col-2 " > </div>
+        <div class="col-3 mb-2 justify-content-end" >
+            <ul class="nav nav-pills ms-3 ">
+                <li class="nav-item " style="border-color: #0a53be">
+                    <button type="button" class="btn btn-info me-3" onclick="printCompleteTable()" style="color: white">Print User Table</button>
+
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+
+
+
+
+    <div class="tab-content" >
+        <div class="tab-pane fade " id="UserForm">
+            <!-- employee form start -->
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <div class="card form-area ">
+                        <div class="card-body ">
+                            <div class="row mt-3">
+
+                                <div class="col-1"></div>
+                                <div class="col-6 mt-3  ">
+
+                                    <h2 class=" mt-3 align-center" id="userTitle"> New User Enrollment</h2>
+
+
+                                </div>
+                                <div class="col-3 text-center mt-3">
+                                </div>
+
+                                <div class="col-1  mt-3 align-middle text-center">
+                                    <button class="btn btn-primary" id="userrefreshbtn" onclick="refreshUserFormByuserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-10 form-area mt-2">
+                                    <hr class="hr mb-3" />
+
+                                    <form action="" onsubmit="return false">
+                                        <!-- reqired field -->
+                                        <div class="row">
+                                            <div class="col-12 text-end  ">
+
+                                                <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- reqired field end  -->
+
+                                        <!-- Select Employee start -->
+                                        <div class="row mt-2 mb-2">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="selectEmployee" class="fw-bold form-label">Employee  <span class="text-danger">*</span></label>
+                                                    <select id="selectEmployee" class="form-select"  required
+                                                            onchange="dropDownValidationD(this,'','user','employee_id'); getUserEmail()">
+                                                        <option  value="" disabled selected>Select a Employee</option>
+                                                        <option value="Haflan">Haflan</option>
+                                                        <option value="Mohamed">Mohamed</option>
+
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- select employee field end -->
+
+                                        <!-- username start -->
+                                        <div class="row mt-2 mb-2">
+                                            <div class="col-12">
+                                                <div class="form-group  ">
+                                                    <label for="textUsername" class="fw-bold form-label">Username <span class="text-danger">*</span></label>
+                                                    <input type="text" required class="form-control" id="textUsername" placeholder="Enter Username"  onkeyup="textFieldValiation(this,'^[a-zA-Z0-9]{5,16}$','user','username')">
+
+                                                </div>
+
+
+                                            </div>
+
+
+
+                                        </div>
+                                        <!-- username end -->
+
+                                        <!-- Password and re enter password field  -->
+                                        <div class="row mt-2 mb-2">
+                                            <div class="col-6">
+                                                <div class="form-group ">
+                                                    <label for="textPassword" class="fw-bold form-label">Password <span class="text-danger">*</span></label>
+                                                    <span id="passwordHelpInline" class="form-text"> Must be 5-15 characters long.
+    </span>
+                                                    <input type="password" required class="form-control" id="textPassword" placeholder="Enter Password" onkeyup="textFieldValiation(this,'^[a-zA-Z0-9]{5,15}$','user','password')">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group ">
+                                                    <label for="textPasswordRT" class="fw-bold form-label">Re-enter Password <span class="text-danger">*</span></label>
+                                                    <input type="password" required class="form-control" id="textPasswordRT" placeholder="Re-Enter Password" onkeyup="PasswordRTValidator()">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <!--Password and re enter password field -->
+
+
+
+                                        <!-- Email and user status -->
+                                        <div class="row mt-2 mb-2">
+                                            <div class="col-6">
+                                                <div class="form-group ">
+                                                    <label for="textEmail" class="fw-bold form-label">Email <span class="text-danger">*</span></label>
+                                                    <input type="email" class="form-control" required id="textEmail" readonly disabled placeholder="Enter Email" onkeyup="textFieldValiation(this,'^[a-zA-Z0-9]{3,20}[@][a-zA-Z]{3,20}[.][a-zA-Z]{2,20}$','user','email')">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6">
+                                 <span class=" col-5">
+                                     <label for="checkUserStatus" class="fw-bold">
+                                         User  Status :
+                                      <span class="text-danger ">*</span>
+
+                                        </label>
+                                 </span>
+                                                <div class="form-check form-switch mt-2 form-switch-xl">
+                                                    <input class="form-check-input" type="checkbox" id="checkUserStatus"
+                                                           onchange="checkboxValidation(this,'user','status',true,false,checkUserStatusLabel,'User Account is Active','User Account is Not Active')">
+                                                    <label class="form-check-label fw-bold" for="checkUserStatus" id="checkUserStatusLabel">  User Account is not Active</label>
+                                                </div>
+
+                                                <!--                                <div class="input-group">-->
+                                                <!--                                 <span class="input-group-text col-5">-->
+                                                <!--                                     <label for="checkUserStatus" class="fw-bold">-->
+                                                <!--                                         User  Status :-->
+                                                <!--                                      <span class="text-danger ">*</span>-->
+                                                <!--                                      <i class="fa-solid fa-circle-question fa-beat-fade fa-sm" style="color: #ff0000;"-->
+                                                <!--                                         data-bs-toggle="tooltip" data-bs-title="check status" data-bs-placement="bottom"></i>-->
+                                                <!--                                        </label>-->
+                                                <!--                                 </span>-->
+                                                <!--                                    <div class="form-check form-check-inline ">-->
+                                                <!--                                        <input type="checkbox" class="form-check-input " id="checkUserStatus"-->
+                                                <!--                                               onchange="checkboxValidation(this,'user','status',true,false,checkUserStatusLabel,'User Account is Active','User Account is Not Active')">-->
+                                                <!--                                        <label for="checkUserStatus" class="form-check-label " id="checkUserStatusLabel">User Account is not Active</label>-->
+                                                <!--                                    </div>-->
+                                                <!--                                </div>-->
+
+                                            </div>
+
+
+
+                                        </div>
+                                        <!--Email and user status end  -->
+
+                                        <!--roles field  -->
+                                        <div class="row mt-3 mb-2">
+                                            <div class="col-3">
+                                                <label for="textNote" class="fw-bold">Roles <span class="text-danger">*</span></label>
+                                            </div>
+                                            <div class="col-9" >
+                                                <div class="form-group">
+                                                    <div  id="divRoles">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Note field -->
+                                        <div class="row mt-3 mb-2">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="textNote" class="fw-bold">Note </label>
+                                                    <textarea type="text" class="form-control" id="textNote" placeholder="Enter Note"
+                                                              onkeyup="textFieldValiation(textNote,'^.*$','user','note')"
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+
+                                                    <label for="imgUserPreview" class="fw-bold">Image </label>
+                                                    <button type="button" class="btn btn-primary" id="btnImageSelect" onclick="fileUserPhoto.click()">Select Image</button>
+                                                    <button type="button" class="btn btn-warning" id="btnImageClear" onclick="btnClearImage()">Clear Image</button>
+
+
+                                                    <img src="/resources/images/user2.jpg" alt="image_of_user" width="100px" height="100px" id="imgUserPreview" class="mt-1 mb-1">
+                                                </div>
+                                                <input type="text" class="form-control" disabled id="txtUserPhoto">
+                                                <input type="file" class="form-control d-none" id="fileUserPhoto" onchange="validatefile(this,'user','user_photo','user_photo_name',imgUserPreview,txtUserPhoto)">
+
+
+
+                                            </div>
+
+                                        </div>
+                                        <!-- Note field end -->
+
+
+
+
+
+
+                                        <div class="row mt-5 mb-3">
+                                            <div class="col-4 text-start">
+                                                <button type="button" class="btn btn-danger buttons btn-clear" id="btnclear" onclick="buttonUserClearForm()"><i class="fa-solid fa-trash text-end"></i> CLEAR</button>
+                                            </div>
+                                            <div class="col-8 text-end">
+                                                <button type="button" class="btn btn-warning buttons" id="userUpdBtn" onclick="buttonUserUpdate()"><i class="fas fa-edit"></i> UPDATE</button>
+                                                <button type="submit" class="btn btn-success buttons" id="userAddBtn" onclick="btnUserAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-1"></div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+                <!--  form end -->
+            </div>
+        </div>
+        <div class="tab-pane fade show active" id="UserTable"  >
+            <!--  table start -->
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10  ">
+                    <div class="card table-area p-2">
+<!--                        -->
+                        <table class="table table-hover " id="tableuser">
+                            <thead >
+                            <tr>
+                                <th>#</th>
+                                <th>Emp Number</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th style="width: 100px">Status</th>
+                                <th>Role</th>
+                                <th  class="btn-display">Action</th>
+
+                            </tr>
+
+                            </thead>
+                            <tbody  >
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
+            <!--  table end -->
+
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+
+
+<!--print employee details-->
+<div class="modal" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>view details</h2>
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="col-md-12" id="printUserTable">
+                    <div class="card m-1">
+                        <div class="card-body " >
+                            <div class="row">
+                                <div class="col-12 mb-1">
+                                    <h1 class="text-center" >User Details</h1>
+
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >User Id</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdUserNumber"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >User Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdUsername"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >User Fullname</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdUserFullname"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdEmail"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >User Status</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdStatus"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Designation</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdDesignation"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Roles</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdRoles"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Note</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdNote"></p>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- table function  js-->
+<script src="resources/js/tablefunction.js"></script>
+<!-- common function  js -->
+<script src="resources/js/common.js"></script>
+<!--validation files  -->
+<!--      <script src="resources/js/emp-val.js"></script>-->
+<script src="resources/js/validation.js"></script>
+<!-- emp js -->
+<script src="resources/controllerjs/user-common.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+</body>
+</html>

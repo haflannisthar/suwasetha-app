@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+     <link rel="stylesheet" href="/resources/css/sidepanal.css">
+
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+ 
+   <!-- link datatTable css file -->
+   <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+   
+   <!-- link dataTable js file -->
+   <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="/resources/js/sweetalert.js"></script>
+
+    
+
+   
+    <title th:text="${title}"></title>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{sidebar :: SidebarFragment}">
+
+</div>
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"><i class="fa-solid fa-user-tie fa-1x"></i> Employee Management</h2>
+            </div>
+        </div>
+    </div>
+
+            <div class="row mt-2">
+                <div class="col-6 text-start">
+                    <button type="button" class="btn btn-info mt-2 me-3" onclick="printCompleteTable()">Print Employee Table</button>
+                </div>
+        <div class="col-6 text-end ">
+            <button type="button" class="btn btn-primary mt-2 me-3" data-bs-toggle="modal" data-bs-target="#modalEployeeAddForm">Add Employee</button>
+        </div>
+        
+           </div>
+
+       <div class="modal" id="modalEployeeAddForm" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+                <div class="row mt-3">
+                 
+                       <div class="col-1"></div>
+                        <div class="col-6 mt-3  ">
+                     
+                        <h2 class=" mt-3 align-center"> New Employee Enrollment</h2>
+                       
+                    
+                        </div>  
+                        <div class="col-3 text-center mt-3">
+                        </div>
+                   
+                       <div class="col-1  mt-3 align-middle text-center">
+                      <button type="button" class="btn btn-close " onclick="buttonModalClose()" data-bs-dismiss="modal"  ></button>
+                       </div>  
+                       <div class="col-1"></div>
+                    </div>
+                
+                 
+              
+              <div class="modal-body">
+                  <div class="row">
+                      <div class="col-1"></div>
+                      <div class="col-10 form-area mt-2">
+                          
+                              
+                       
+                              <hr class="hr mb-3" />
+                           
+                        <!-- form area start -->
+                          
+                        <form action="" onsubmit="return false">
+                            <!-- reqired field -->
+                       <div class="row">
+                          <div class="col-12 text-end  ">
+                              
+                              <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                          </div>
+                        </div>
+          
+                         <!-- reqired field end  -->
+          
+                         <!-- first name and last name field start -->
+                          <div class="row mt-2 mb-2">
+                              <div class="col-8">
+                                  <div class="form-group">
+                                      <label for="textfullname" class="form-label fw-bold">Full Name <span class="text-danger">*</span></label>
+                                      <input type="text" class="form-control" id="textfullname" placeholder="Full Name"
+                                      onkeyup=" textFieldValiation(textfullname,'^(([A-Z][a-z]{3,20}[ ])+([A-Z][a-z]{3,20}){1})$','employee','fullname')
+                                      generateCallingNameValues()">
+                                    </div>
+                              </div>
+                              <div class="col-4">
+                                <div class="form-group">
+                                    <label for="textCallingName" class="form-label fw-bold">Calling Name <span class="text-danger">*</span></label>
+                                    <input type="text" list="callingname" id="textCallingName" class="form-select" placeholder="enter calling name"
+                                    onkeyup="textCallingNameValidator(this) " onchange="textCallingNameValidator(this)"
+                                   >
+                                    <datalist id="callingname">
+                                        <option value="haflan">
+                                        <option value="sudarshan">
+                                        <option value="nisthar">
+                                        <option value="nuwan">
+                                        <option value="hari">
+                                    </datalist>  
+                                  </div>
+                            </div>
+                              
+                            
+                              
+                          </div>
+                        <!-- first name and last name field end -->
+                              
+                        <!-- dob start -->
+                        <div class="row mt-2 mb-2">
+                           <div class="col-6">
+                          <div class="form-group ">
+                              <label for="textDateOfBirth" class="fw-bold form-label">Date of birth <span class="text-danger">*</span></label>
+                             <input type="date" class="form-control" id="textDateOfBirth"
+                              onchange="dateFieldValiation(textDateOfBirth,'^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$','employee','dateofbirth')">
+                            </div>
+          
+                       </div>
+                       <div class="col-6">
+                        <div class="form-group ">
+                            <label for="textNic" class="fw-bold form-label">Nic <span class="text-danger">*</span></label>
+                           <input type="text" class="form-control" id="textNic" placeholder="Enter Nic"
+                           onkeyup="textFieldValiation(textNic,'^(([1-9][0-9][0-9]{7}[vVxX])|(((19)|(2)[0-9])[0-9]{10}))$','employee','nic')">
+                          </div>
+        
+                     </div>
+          
+                          <!-- <div class="col-4">
+                              <div class="form-group ">
+                                  <label for="inputDobDate" class="fw-bold form-label">Date</label>
+                                  <select id="inputDobDate" class="form-control" >
+                                    <option selected>Select a date</option>
+                                   
+                                   
+                                  </select>
+                                </div>
+          
+                          </div>
+                          <div class="col-4">
+                              <div class="form-group ">
+                                  <label for="inputDobMonth" class="fw-bold form-label">Month</label>
+                                  <select id="inputDobMonth" class="form-control">
+                                    <option selected>Select a month</option>
+                                    <option>January</option>
+                                    <option>February</option>
+                                    <option>March</option>
+                                  
+                                  </select>
+                                </div>
+                          </div>
+                          <div class="col-4">
+                              <div class="form-group ">
+                                  <label for="inputDobYear" class="fw-bold form-label">Year</label>
+                                  <select id="inputDobYear" class="form-control" >
+                                    <option selected>Select a year</option>
+                                    <option>January</option>
+                                    <option>February</option>
+                                    <option>March</option>
+                                  
+                                  </select>
+                                </div>
+                          </div> -->
+                        </div>
+                          <!-- dob end -->
+          
+                          <!-- gender status -->
+                          <div class="row mt-2 mb-2">
+                              <div class="col-6">
+                                  <div class="form-group ">
+                                      <label for="textGender" class="fw-bold form-label">Gender <span class="text-danger">*</span></label>
+                                      <select id="textGender" class="form-select"
+                                      onchange="dropDownValidation(textGender,'','employee','gender')"
+                                   >
+                                        <option  value="" disabled selected>Select a gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                       
+                                      
+                                      </select>
+                                    </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="form-group ">
+                                  <label for="textStatus" class="fw-bold form-label">Status </label>
+                                  <select id="textStatus" class="form-select" 
+                                  onchange="dropDownValidation(textStatus,'','employee','status')"
+                               >
+                                    <option value="" selected disabled> Select a status</option>
+                                    <option value="in-active">in-active</option>
+                                    <option value="active">active</option>
+                                   
+                                  
+                                  </select>
+                                </div>
+                              </div>
+                              
+                          </div>
+                            <!--gender status end  -->
+
+
+                              <!-- mobile no and land no and email -->
+                          <div class="row mt-2 mb-2">
+                            <div class="col-4">
+                                <div class="form-group ">
+                                    <label for="textMobileNumber" class="fw-bold form-label">Mobile No <span class="text-danger">*</span></label>
+                                    <input type="text" id="textMobileNumber" class="form-control" placeholder="enter mobile no"
+                                    onkeyup="textFieldValiation(textMobileNumber,'^[0][7][01245678][0-9]{7}$','employee','mobile')">
+                                   
+                                  </div>
+                            </div>
+
+                            <div class="col-4">
+                              <div class="form-group ">
+                                  <label for="textLandNumber" class="fw-bold form-label">Land No </label>
+                                  <input type="text" id="textLandNumber" class="form-control" placeholder="Enter Land No"
+                                  onkeyup="textFieldValiation(textLandNumber,'^[0](11|21|23|24|25|26|27|31|32|33|35|36|37|38|41|45|47|51|52|54|55|57|63|65|66|67|81)[0-9]{7}$','employee','landno')">
+                                 
+                                </div>
+                          </div>
+                           
+                            <div class="col-4">
+                              <div class="form-group ">
+                                <label for="textEmail" class="fw-bold form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email"  id="textEmail" class="form-control" placeholder="Enter E-mail"
+                                onkeyup="textFieldValiation(textEmail,'^[a-zA-Z0-9]{3,20}[@][a-zA-Z]{3,20}[.][a-zA-Z]{2,20}$','employee','email')">
+                              </div>
+                            </div>
+                            
+                        </div>
+                          <!--contactno landno email end  -->
+                          <!-- address field -->
+                            <div class="row mt-2 mb-2">
+                              <div class="form-group">
+                                  <label for="textAddress" class="fw-bold">Address <span class="text-danger">*</span></label>
+                                  <input type="text" class="form-control" id="textAddress" placeholder="Enter Address"
+                                  onkeyup="textFieldValiation(textAddress,'^.*$','employee','address')">
+                                </div>
+                            </div>
+                           <!-- address field end -->
+                            <!-- Note field -->
+                            <div class="row mt-2 mb-2">
+                              <div class="form-group">
+                                  <label for="textNote" class="fw-bold">Note </label>
+                                  <textarea type="text" class="form-control" id="textNote" placeholder="Enter Note"
+                                 onkeyup="textFieldValiation(textNote,'^.*$','employee','note')"
+                                  ></textarea>
+                                </div>
+                            </div>
+                           <!-- Note field end -->
+
+                                <!-- designation and civil status emplyee status -->
+                          <div class="row mt-2 mb-2">
+                            <div class="col-4">
+                                <div class="form-group ">
+                                    <label for="selectDesignation" class="fw-bold form-label">Designation <span class="text-danger">*</span></label>
+                                    <select  id="selectDesignation" class="form-select "
+                                           onchange="dropDownValidationD(selectDesignation,'','employee','designation_id')"  >
+                                      <option value="" selected disabled >Select Designation</option>
+                                      <option value="Manager">Manager</option>
+                                      <option value="Accountant">Accountant</option>
+                                      <option value="Developer">Developer</option>
+                                      <option value="Software Engineer">Software Engineer</option>
+                                      <option value="Team Leader">Team Leader</option>
+                                  </select>                                   
+                                  </div>
+                            </div>
+
+                            <div class="col-4">
+                              <div class="form-group ">
+                                  <label for="selectCivilStatus" class="fw-bold form-label">Civil Status <span class="text-danger">*</span></label>
+                                  <select  id="selectCivilStatus" class="form-select"
+                                    onchange=" dropDownValidation(selectCivilStatus,'','employee','civilstatus')">
+                                    <option value="" selected disabled>Select Civil Status</option>
+                                    <option value="Married">Married</option>
+                                    <option value="Single">Single</option>
+                                </select>                                 
+                                </div>
+                          </div>
+                           
+                            <div class="col-4">
+                              <div class="form-group ">
+                                <label for="selectEmployeeStatus" class="fw-bold form-label">Employee Status <span class="text-danger">*</span></label>
+                                <select class="form-select" id="selectEmployeeStatus"
+                                        onchange="dropDownValidationD(selectEmployeeStatus,'','employee','employeestatus_id')">
+                                  <option value="" selected disabled>Select Employee Status</option>
+                                  <option value="Working">Working</option>
+                                  <option value="Resigned">Resigned</option>
+                                  <option value="Deleted">Deleted</option>
+                              </select>                              </div>
+                            </div>
+                            
+                           </div>
+                          <!--designation civilstatus employee status end  -->
+          
+                           
+          
+                        
+                          <div class="row mt-5 mb-3">
+                          <div class="col-4 text-start">                           
+                               <button type="button" class="btn btn-danger buttons btn-clear" onclick="buttonEmployeeClear()"><i class="fa-solid fa-trash text-end"></i> CLEAR</button>
+                          </div>
+                          <div class="col-8 text-end">
+                              <button type="button" class="btn btn-warning buttons" id="btnUpdateEmp" onclick="buttonEmployeeUpdate()"><i class="fas fa-edit"></i> UPDATE</button>
+                              <button type="submit" class="btn btn-success buttons" id="btnAddEmp" onclick="buttonEmployeeAdd()"><i class="fas fa-save"></i> SAVE</button>
+                              
+                          </div>
+                           </div>
+                        </form>
+          
+          
+              
+                          
+                      </div>
+                      <div class="col-1"></div>
+                     
+                 
+                 
+                    </div>
+              </div>
+          </div>
+      </div>
+       </div>
+     
+
+       <!-- table  -->
+       <div class="mt-2 card p-1">
+        <table class="table table-hover" id="tableemployee">
+          <thead >
+           <tr>
+            <th>#</th>
+            <th>Emp Number</th>
+            <th>Full Name</th>
+            <th>Nic</th>
+            <th>Mobile</th>
+            <th>E-mail</th>
+               <th>Status</th>
+
+            <th class="btn-display">Action</th>
+
+           </tr>
+
+          </thead>
+          <tbody >
+          </tbody>
+        </table> 
+        </div>
+       
+    
+
+
+    </div>
+<!--print employee details-->
+  <div class="modal" id="modalPrintEmployee">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>view details</h2>
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <table  class="table table-hover" id="printEmployeeTable">
+                    <tr>
+                        <th>Employee Number</th>
+                        <td id="tdEmpNumber"></td>
+                    </tr>
+                    <tr>
+                        <th>FullName</th>
+                        <td id="tdFullname"></td>
+                    </tr>
+                    <tr>
+                        <th>CallingName</th>
+                        <td id="tdCallingName"></td>
+                    </tr>
+                    <tr>
+                        <th>Nic</th>
+                        <td id="tdNic"></td>
+                    </tr>
+                    <tr>
+                        <th> Email</th>
+                        <td id="tdEmail"></td>
+                    </tr>
+                    <tr>
+                        <th> Mobile Number</th>
+                        <td id="tdMobile"></td>
+                    </tr>
+                    <tr>
+                    <th> Land Number</th>
+                    <td id="tdLandNumber"></td>
+                    </tr>
+                    <tr>
+                    <th> Address</th>
+                    <td id="tdAddress"></td>
+                </tr>
+                    <tr>
+                        <th> Gender</th>
+                        <td id="tdGender"></td>
+                    </tr>
+                    <tr>
+                        <th> CivilStatus</th>
+                        <td id="tdCivilStatus"></td>
+                    </tr>
+                    <tr>
+                        <th> Date of Birth</th>
+                        <td id="tdDob"></td>
+                    </tr>
+                    <tr>
+                        <th> Employee Status</th>
+                        <td id="tdEmployeeStatus"></td>
+                    </tr>
+                    <tr>
+                    <th> Employee Designation</th>
+                    <td id="tdDesignation"></td>
+                    </tr>
+                    <tr>
+                        <th> Note</th>
+                        <td id="tdNote"></td>
+                    </tr>
+
+
+
+
+
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+      <!-- table function  js-->
+      <script src="resources/js/tablefunction.js"></script> 
+      <!-- common function  js -->
+      <script src="resources/js/common.js"></script>
+      <!--validation files  -->
+<!--      <script src="resources/js/emp-val.js"></script>-->
+      <script src="resources/js/validation.js"></script>
+        <!-- emp js -->
+        <script src="resources/controllerjs/emp-common.js"></script>
+
+   
+</body>
+</html>

@@ -1,0 +1,99 @@
+/*body{*/
+/*    background-image: url(../images/employee.jpg);*/
+/*    background-repeat: no-repeat;*/
+/*    background-size: cover;*/
+/*}*/
+.title-div{
+    height: 50px;
+    padding: 10px;
+    background-color: rgba(110, 100, 150, 0.1);
+   width: 1100px;
+margin: 0 auto;
+    border-radius:5px;
+    border-left: 4px solid blue;
+    border-right: 4px solid blue;
+
+}
+/* .form-area{
+   
+    background-color: rgba(82, 212, 195, 0.219);
+} */
+.buttons{
+    
+    border-radius: 10px;
+}
+/*.table-area{*/
+/*    !*background-color: rgb(240, 252, 250);*!*/
+/*    !*border-radius: 10px;*!*/
+/*    background-color: #f5f8fb ;*/
+
+/*}*/
+
+
+
+
+body{
+    background-color: #f5f8fb;
+
+}
+/*.table-head{*/
+/*    background-color: black;*/
+/*    color: aliceblue;*/
+/*}*/
+.workingstats-w{
+    background-color: green;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+}
+.workingstats-r{
+    background-color: orangered;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+}
+.workingstats-d{
+    background-color: red;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+}
+.btnsave,.btnedit,.btndelete{
+    border: white 2px;
+    border-radius: 10px;
+}
+.btnsave:hover{
+   color: green;
+   
+}
+.btnedit:hover{
+    color: yellow;
+ }
+ .btndelete:hover{
+    color: red;
+ }
+ .working_status{
+    background-color: green;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    padding: 2px;
+    font-weight: bold;
+ }
+ .resign_status{
+    background-color: orangered;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    padding: 2px;
+    font-weight: bold;
+ }
+ .deleted_status{
+    background-color: red;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    padding: 2px;
+    font-weight: bold;
+ }
+

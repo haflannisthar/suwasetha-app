@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+    <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+
+    <!-- css -->
+    <link rel="stylesheet" href="../resources/css/employee.css">
+    <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+
+    <!-- link datatTable css file -->
+    <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+
+    <!-- link dataTable js file -->
+    <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="/resources/js/sweetalert.js"></script>
+
+
+
+
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+
+
+<div class="container-fluid " style="margin-top: 80px">
+    <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2" ><i class="fa-solid  fa-1x"></i> Brand Management</h2>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="row mt-3">
+        <div class="col-1"></div>
+        <div class="col-6 mb-2">
+            <ul class="nav nav-pills ms-2" role="tablist" >
+
+                <li class="nav-item" >
+                    <a class="nav-link active "  data-bs-toggle="tab" href="#BrandTable"  ><i class="fa-solid fa-outdent me-3"></i> Brand Table</a>
+
+                </li>
+                <li class="nav-item" >
+                    <a class="nav-link "  data-bs-toggle="tab" href="#BrandForm"  ><i class="fa-regular fa-pen-to-square me-3"></i> Brand Form </a>
+
+                </li>
+
+
+            </ul>
+        </div>
+        <div class="col-2 " > </div>
+        <div class="col-3 mb-2 justify-content-start" >
+            <ul class="nav nav-pills ms-3 ">
+                <li class="nav-item " style="border-color: #0a53be">
+                    <button type="button" class="btn btn-info me-3" onclick="printCompleteTable()" style="color: white">Print Brand Table</button>
+
+                </li>
+            </ul>
+        </div>
+
+
+    </div>
+
+    <div class="tab-content" >
+        <div class="tab-pane fade " id="BrandForm">
+            <!-- employee form start -->
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <div class="card form-area ">
+                        <div class="card-body ">
+                            <div class="row mt-3">
+
+                                <div class="col-1"></div>
+                                <div class="col-6 mt-3  ">
+
+                                    <h2 class=" mt-3 align-center" id="brandTitle"> New Brand Enrollment</h2>
+
+
+                                </div>
+                                <div class="col-3 text-center mt-3">
+                                </div>
+
+                                <div class="col-1  mt-3 align-middle text-center">
+                                    <button class="btn btn-primary" id="brandrefreshbtn" onclick="refreshBrandFormByuserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+
+
+
+                            <form action="" onsubmit="return false">
+
+                                <div class="row">
+                                    <div class="col-1"></div>
+                                    <div class="col-10 text-end  ">
+                                        <hr class="hr mb-3" />
+                                        <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row mt-2 mb-2">
+
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label for="textBrand" class="form-label fw-bold">Brand <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="textBrand" placeholder="Enter Brand name" required
+                                                   onkeyup=" textFieldValiation(textBrand,'^[A-Z][a-z\'-.&]{2,19}([ ]?[A-Z][a-z\'-.&]{2,19})*( [A-Z][a-z]{2,19})?( \\((pvt)\\) ltd)?$','brand','name')
+                                      ">
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-4">
+                                        <div class="form-group ">
+                                            <label for="selectCategory" class="fw-bold form-label"> Category <span class="text-danger">*</span></label>
+<!--                                            <select class="form-select" id="selectCategory" required-->
+<!--                                                     onchange="addtoobj(selectCategory)-->
+<!--                                                 ">-->
+<!--                                                <option value="" selected disabled>Select Category Name</option>-->
+<!--                                            </select>-->
+
+                                            <div class="dropdown">
+
+
+                                                <button class="btn btn-outline-secondary dropdown-toggle" style="width: 300px" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"
+                                                >
+                                                    Select Categories
+                                                </button>
+                                                <ul class="dropdown-menu" style=" z-index: 1000;width: 300px"  id="selectCategory" aria-labelledby="dropdownMenuButton" >
+                                                </ul>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-4" >
+                                        <div class="form-group">
+                                            <label  class="form-label fw-bold">Selected Categories <span class="text-danger">*</span></label>
+                                            <div id="selectedCatogories"></div>
+                                    </div>
+
+                                </div>
+                                </div>
+
+
+                                <div class="row mt-5 mb-3">
+                                    <div class="col-4 text-start">
+                                        <button type="button" class="btn btn-danger buttons btn-clear" onclick="buttonBrandClear()"><i class="fa-solid fa-trash text-end"></i> CLEAR</button>
+                                    </div>
+                                    <div class="col-8 text-end">
+                                        <button type="button" class="btn btn-warning buttons" id="btnUpdate" onclick="buttonBrandUpdate()"><i class="fas fa-edit"></i> UPDATE</button>
+                                        <button type="submit" class="btn btn-success buttons" id="btnAdd" onclick="buttonBrandAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+                <!--  form end -->
+            </div>
+        </div>
+        <div class="tab-pane fade show active" id="BrandTable" >
+            <!--  table start -->
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10  ">
+                    <div class="card table-area p-2">
+                        <table class="table table-hover" id="tableBrand">
+                            <thead >
+                            <tr>
+                                <th class="text-center"># </th>
+
+                                <th class="text-center">Brand Name</th>
+                                <th class="text-center">Category</th>
+
+                                <th class="btn-display text-center">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+
+
+                            </tbody>
+                        </table>
+
+
+
+
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
+            <!--  table end -->
+
+        </div>
+    </div>
+
+
+
+    <!--print employee details-->
+    <div class="modal" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-body">
+
+
+                    <div class="col-md-12" id="printBrandTable">
+                        <div class="card m-1">
+                            <div class="card-body " >
+                                <div class="row">
+                                    <div class="col-12 mb-1">
+                                        <h1 class="text-center" >Brand Details</h1>
+
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+
+                                    <div class="col-sm-3">
+                                        <p class="mb-0" >Brand Number</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" id="tdNumber"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+
+                                    <div class="col-sm-3">
+                                        <p class="mb-0" >Brand Name</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" id="tdBrname"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Category</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" id="tdCatname"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- table function  js-->
+<script src="resources/js/tablefunction.js"></script>
+<!-- common function  js -->
+<script src="resources/js/common.js"></script>
+<!--validation files  -->
+<!--      <script src="resources/js/emp-val.js"></script>-->
+<script src="resources/js/validation.js"></script>
+<!-- emp js -->
+<script src="resources/controllerjs/brand-common.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+
+</body>
+</html>

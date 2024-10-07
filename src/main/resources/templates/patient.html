@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+     <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+ 
+   <!-- link datatTable css file -->
+   <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+   
+   <!-- link dataTable js file -->
+   <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="/resources/js/sweetalert.js"></script>
+
+    
+
+   
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"><i class="fa-solid  fa-1x"></i> Patient Management</h2>
+            </div>
+        </div>
+       </div>
+
+
+        <div class="row mt-3">
+            <div class="col-1"></div>
+            <div class="col-6 mb-2">
+                <ul class="nav nav-pills ms-2 "  >
+
+                    <li class="nav-item " style="border-color: #0a53be" >
+                         <a class="nav-link active "   data-bs-toggle="tab" href="#PatientTable"><i class="fa-solid fa-outdent me-3"></i> Patient Table</a>
+
+                    </li>
+
+                    <li class="nav-item" style="border-color: #0a53be">
+                        <a class="nav-link "  data-bs-toggle="tab" href="#PatientForm"  ><i class="fa-regular fa-pen-to-square me-3"></i> Patient Form </a>
+
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-2 mb-2 justify-content-end" >
+                <ul class="nav nav-pills ms-3 ">
+                    <li class="nav-item " style="border-color: #0a53be">
+                        <button type="button" class="btn btn-info me-3" onclick="printCompleteTable()" style="color: white">Print Patient Table</button>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <div class="tab-content" >
+            <div class="tab-pane fade " id="PatientForm">
+                <!-- patient form start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <div class="card form-area ">
+                            <div class="card-body ">
+
+                                <div class="row mt-3">
+
+                                    <div class="col-1"></div>
+                                    <div class="col-6 mt-3  ">
+
+                                        <h2 class=" mt-3 align-center" id="patientTitle"> New Patient Enrollment</h2>
+
+
+                                    </div>
+                                    <div class="col-3 text-center mt-3">
+                                    </div>
+
+                                    <div class="col-1  mt-3 align-middle text-center">
+                                        <button class="btn btn-primary"  onclick="refreshPatientFormByUserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>
+
+                                    <div class="row">
+                                        <div class="col-1"></div>
+                                        <div class="col-10 form-area mt-2">
+
+
+
+                                            <hr class="hr mb-3" />
+
+                                            <!-- form area start -->
+
+                                            <form action="" onsubmit="return false">
+                                                <!-- reqired field -->
+                                                <div class="row">
+                                                    <div class="col-12 text-end  ">
+
+                                                        <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- reqired field end  -->
+
+                                                <!-- first name and last name field start -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-2">
+                                                        <div class="form-group ">
+                                                            <label for="selectTitle" class="fw-bold form-label"> Title <span class="text-danger">*</span></label>
+                                                            <select id="selectTitle" class="form-select" required
+                                                                    onchange="dropDownValidation(selectTitle,'','patient','title')"
+                                                            >
+                                                                <option  value="" disabled selected>Title</option>
+                                                                <option value="Mr">Mr</option>
+                                                                <option value="Miss">Miss</option>
+                                                                <option value="Mrs">Mrs</option>
+
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <div class="form-group">
+                                                            <label for="textFirstName" class="form-label fw-bold">First Name <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="textFirstName" placeholder=" Enter First Name" required
+                                                                   onkeyup=" textFieldValiation(textFirstName,'^(([A-Z][a-z]{2,20}){1})$','patient','firstname')">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <div class="form-group">
+                                                            <label for="textLastName" class="form-label fw-bold">Last Name <span class="text-danger">*</span></label>
+                                                            <input type="text"  id="textLastName" class="form-control" placeholder="Enter Last Name" required
+                                                                   onkeyup=" textFieldValiation(textLastName,'^(([A-Z][a-z]{2,20}){1})$','patient','lastname')">
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                                <!-- first name and last name field end -->
+
+                                                <!-- dob gender  mobile -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-4">
+                                                        <div class="form-group ">
+                                                            <label for="textDateOfBirth" class="fw-bold form-label">Date of birth <span class="text-danger">*</span></label>
+                                                            <input type="date" class="form-control" id="textDateOfBirth" required onkeydown="return false"
+                                                                   onchange="dateFieldValiation(textDateOfBirth,'^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$','patient','dateofbirth');
+                                                                  ">
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group ">
+                                                            <label for="selectGender" class="fw-bold form-label">Gender <span class="text-danger">*</span></label>
+                                                            <select id="selectGender" class="form-select" required
+                                                                    onchange="dropDownValidation(selectGender,'','patient','gender')"
+                                                            >
+                                                                <option  value="" disabled selected>Select Gender</option>
+                                                                <option value="Male">Male</option>
+                                                                <option value="Female">Female</option>
+
+
+                                                            </select>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group ">
+                                                            <label for="textContactNumber" class="fw-bold form-label">Contact Number <span class="text-danger">*</span></label>
+                                                            <input type="text" id="textContactNumber" class="form-control" placeholder="Enter Contact Number" required
+                                                                   onkeyup="textFieldValiation(textContactNumber,'^(([0][7][01245678][0-9]{7})||([0](11|21|23|24|25|26|27|31|32|33|35|36|37|38|41|45|47|51|52|54|55|57|63|65|66|67|81)[0-9]{7}))$','patient','contactno')">
+
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                                <!-- dob gender  mobile end -->
+
+
+
+
+
+
+
+                                                <!-- Note field -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="textNote" class="fw-bold">Note </label>
+                                                        <textarea type="text" class="form-control" id="textNote" placeholder="Enter Note"
+                                                                  onkeyup="textFieldValiation(textNote,'^.*$','patient','note')"
+                                                        ></textarea>
+                                                    </div>
+                                                </div>
+                                                <!-- Note field end -->
+
+                                                  <!--  -->
+
+                                                <hr class="hr mb-3 mt-2" />
+                                                <!-- emergency field -->
+                                                <div class="row">
+                                                    <div class="col-12 text-start  ">
+
+                                                        <span class="fw-bold">Emergency Contact Details</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- emergency field end  -->
+                                                <div class="row mt-2 mb-2" >
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="textEmergencyName" class="form-label fw-bold"> Name </label>
+                                                            <input type="text" class="form-control" id="textEmergencyName" placeholder="Enter Name" required
+                                                                   onkeyup=" textFieldValiation(textEmergencyName,'^(([A-Z][a-z]{3,20}){1})$','patient','emergencycontactname')">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="textEmergencyContactNo" class="form-label fw-bold"> Contact Number </label>
+                                                            <input type="text" class="form-control" id="textEmergencyContactNo" placeholder="Enter Contact Number" required
+                                                                   onkeyup=" textFieldValiation(textEmergencyContactNo,'^(([0][7][01245678][0-9]{7})||([0](11|21|23|24|25|26|27|31|32|33|35|36|37|38|41|45|47|51|52|54|55|57|63|65|66|67|81)[0-9]{7}))$','patient','emergencycontactno')">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+
+                                                <div class="row mt-5 mb-3">
+                                                    <div class="col-4 text-start">
+                                                        <button type="button" class="btn btn-danger buttons btn-clear" onclick="buttonPatientClear()" >
+<!--                                                               -->
+                                                        <i class="fa-solid fa-trash text-end"></i> CLEAR</button>
+                                                    </div>
+                                                    <div class="col-8 text-end">
+                                                        <button type="button" class="btn btn-warning buttons" id="btnUpdatePat" onclick="buttonPatientUpdate()"><i class="fas fa-edit"></i> UPDATE</button>
+                                                        <button type="submit" class="btn btn-success buttons" id="btnAddPat" onclick="buttonPatientAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                                    </div>
+                                                </div>
+                                            </form>
+
+
+
+
+                                        </div>
+                                        <div class="col-1"></div>
+
+
+
+                                    </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                    <!--  form end -->
+                </div>
+            </div>
+            <div class="tab-pane fade show active" id="PatientTable" >
+                <!--  table start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10  ">
+                        <div class="card table-area p-2" >
+                            <table class="table table-hover" id="tablePatient">
+                                <thead >
+                                <tr>
+                                    <th>#</th>
+                                    <th>Patient Number</th>
+                                    <th> Title</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Contact Number</th>
+                                    <th class="btn-display">Action</th>
+
+                                </tr>
+
+                                </thead>
+                                <tbody >
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!--  table end -->
+
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-5">
+            <div class="col-1"></div>
+            <div class="col-10 ">
+
+            </div>
+            <div class="col-1 text-end ">
+
+            </div>
+
+        </div>
+
+
+       
+    
+
+
+    </div>
+<!--print employee details-->
+  <div class="modal" id="modalPrintEmployee">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>view details</h2>
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="col-md-12" id="printPatientTable">
+                    <div class="card m-1">
+                        <div class="card-body " >
+                            <div class="row">
+                                <div class="col-12 mb-1">
+                                    <h1 class="text-center" >Patient Details</h1>
+
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Patient Number</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdPatNumber"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Title</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdTitle"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">First Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdFirstName"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Last Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdLastName"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Date of Birth</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdDob"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Gender</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdGender"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Mobile Number</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdMobile"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Note</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdNote"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Emergency Contact Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdEcName"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0"> Emergency Contact Number</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdEcNumber"></p>
+                                </div>
+                            </div>
+                            <hr>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+      <!-- table function  js-->
+      <script src="resources/js/tablefunction.js"></script> 
+      <!-- common function  js -->
+      <script src="resources/js/common.js"></script>
+      <!--validation files  -->
+<!--      <script src="resources/js/emp-val.js"></script>-->
+      <script src="resources/js/validation.js"></script>
+        <!-- emp js -->
+        <script src="resources/controllerjs/patient-common.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+</body>
+</html>

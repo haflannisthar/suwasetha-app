@@ -1,0 +1,121 @@
+/* #707a82 */
+
+
+
+
+
+
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+
+  body{
+    font-family: 'Roboto', sans-serif;
+  }
+     /* Add a class to the bell icon for styling */
+     .ringing-bell {
+        /* Set initial styles */
+        transform-origin: 50% 50%;
+        transition: transform 0.3s ease-in-out;
+        size: 30px;
+      }
+  
+      /* Define the animation */
+      @keyframes ringAnimation {
+        0% { transform: rotate(0deg); }
+        25% { transform: rotate(15deg); }
+        50% { transform: rotate(-15deg); }
+        75% { transform: rotate(10deg); }
+        100% { transform: rotate(0deg); }
+      }
+  
+      /* Apply the animation on hover */
+      .ringing-bell:hover {
+        animation: ringAnimation 0.8s ease-in-out infinite;
+      }
+
+
+    #offcanvasMenu{
+        width: 250px;
+
+    }
+    .profile-logo{
+    
+        width: 100px;
+        height: 100px;
+       
+        
+      
+    }
+    .role-name{
+        margin-top: -5px;
+    }
+    button{
+        border: none;
+        background-color: white;
+    }
+    
+    a{
+        text-decoration: none;
+        color: #000;
+    }
+   
+    .list-group-item {
+      position: relative;
+  }
+
+  .fa-caret-down, .fa-caret-up {
+      transition: transform 0.3s ease-in-out;
+  }
+
+.list-group-item:hover{
+background-color:#dae1f3;
+  border-radius: 7px;
+
+}
+.list-group-item:focus{
+  background-color:#dae1f3;
+  border-radius: 7px;
+}
+
+.fa-caret-down{
+  position:absolute;
+  line-height: 24px;
+  top:50%;
+  margin-top: -12px; /* Half of line height to keep left middle postion of container */
+  right: 10px;
+}
+
+
+.navbar-color{
+  background-color: white;
+}
+body{
+  background-color: #f5f8fb;
+
+}
+
+.navcolor{
+    /*background-color: #7426bf;*/
+    background-color:#3473c8;
+}
+
+.txtcolorBrdCrmb{
+    color: white;
+}
+
+.btn_navbar{
+    background-color: white;
+}
+
+.btn_navbar:hover{
+    background-color: #3473c8 !important;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: white;
+    content: "/";
+}
+
+. navbar_button_icon:hover{
+    color: #3473c8 !important;
+}

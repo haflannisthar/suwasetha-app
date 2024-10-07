@@ -1,0 +1,357 @@
+<!DOCTYPE html >
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <title>Login</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="/resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+<!--    <link rel="stylesheet" th:href="@{resources/bootstrap-5.3.1-dist/css/bootstrap.min.css}">-->
+    <script src="/resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+<!--    <script th:src="@{/resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>-->
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+
+
+<!--    <link rel="stylesheet" th:href="@{/resources/css/style.css}">-->
+    <link rel="stylesheet" href="/resources/css/style.css">
+
+    <!-- common function  js -->
+    <script src="resources/js/common.js"></script>
+
+    <script src="/resources/js/sweetalert.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+      <div class="container main">
+          <div class="row">
+              <div class="col-md-6 side-image">
+                         
+                  <!-------------      image     ------------->
+                  
+                
+                
+                  
+              </div>
+              <div class="col-md-6 right">
+                  
+                  <div class="input-box">
+                   
+
+                       
+                     <form action="/login" method="post" >
+                         <header class="header"  >WELCOME</header>
+
+                             <span class="error-msg " th:if="${param.error}"> username password incorrect</span>
+
+
+
+                  
+                     <div class="input-field mt-4">
+                          <input type="text" class="input" id="textUsername" name="username" required >
+                          <label for="textUsername">Username</label> 
+                      </div> 
+                     <div class="input-field">
+                          <input type="password" class="input" id="textPassword" name="password" required>
+                          <label for="textPassword">Password</label>
+                      </div>
+
+                     <div class="input-field">
+                          
+                          <input type="submit" class="submit" value="Sign Up">
+                     </div>
+                         <div class="input-field mt-2 text-center">
+                             <a href="" style="text-decoration: none" data-bs-toggle="modal" data-bs-target="#exampleForgetPassword">Forgot  Password</a>
+                         </div>
+                    </form>
+                    </div> 
+                   
+              </div>
+          </div>
+      </div>
+  </div>
+
+    <!-- Modal -->
+    <div class="modal  fade" id="exampleForgetPassword" tabindex="-1" aria-labelledby="exampleForgotPasswordLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleForgotPasswordLabel">Forgot Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="return false">
+                        <div class="form-group ">
+                            <label for="textForgotUserName" class="fw-bold form-label">Username</label>
+                            <input type="text" class="form-control"  id="textForgotUserName" required placeholder="Enter User Name">
+                        </div>
+                        <div class="form-group ">
+                            <label for="textEmail" class="fw-bold form-label">Email</label>
+                            <input type="email" class="form-control" id="textEmail" required placeholder="Enter Email">
+                        </div>
+                        <div class="mt-2 mb-1">
+                            <div class="col-12 text-end">
+                                <button type="submit" class="btn btn-primary " id="btnUnameEmail" onclick="checkUserDetails()">Get Otp</button>
+                            </div>
+
+                        </div>
+                    </form>
+
+
+
+<!--                    div otp field-->
+
+                    <div  id="divShowOtp" class="mt-2 d-none">
+                        <div class="form-group " >
+                            <label for="textOtp" class="fw-bold form-label">Otp</label>
+                            <input type="text" class="form-control" id="textOtp" required placeholder="Otp">
+                        </div>
+                        <div class="mt-2 mb-1">
+                            <div class="col-12 text-end">
+                                <button type="submit" class="btn btn-primary " id="btnOTP" onclick="checkOtp()">Verify Otp</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div  id="divShowPasswordChange" class="mt-2 d-none">
+                        <div class="form-group " >
+                            <label for="textNewPassword" class="fw-bold form-label">New Password</label>
+                            <input type="password" class="form-control" id="textNewPassword" required placeholder="New Password">
+                        </div>
+                        <div class="form-group " >
+                            <label for="textRTNewPassword" class="fw-bold form-label">Re-Enter New Password</label>
+                            <input type="password" class="form-control" id="textRTNewPassword"  required placeholder="Re-Enter New Password">
+                        </div>
+                        <div class="mt-2 mb-1">
+                            <div class="col-12 text-end">
+                                <button type="submit" class="btn btn-primary " onclick="changeNewPassword()">Change Password</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    const checkUserDetails=()=>{
+        forgetPasswordUser=new Object();
+
+        forgetPasswordUser.username=textForgotUserName.value
+        forgetPasswordUser.email=textEmail.value
+
+
+        if (textForgotUserName.value!=='' && textEmail.value !== ''){
+
+            Swal.fire({
+                title: "Are you sure to send the OTP?",
+                html: forgetPasswordUser.email,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Confirm"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log(forgetPasswordUser)
+                    let serverResponse=ajaxRequestBody("/profile/sendotp","POST",forgetPasswordUser);
+                    if (serverResponse=="OK") {
+                        Swal.fire({
+                            title: "Please Check the Email for the OTP",
+                            text: "",
+                            icon: "success"
+                        });
+
+                        divShowOtp.classList.remove("d-none");
+
+                    }
+                    else{
+                        Swal.fire("Something went wrong", serverResponse, "info");
+
+                    }
+
+                }
+
+
+
+            })
+        }else{
+            let timerInterval;
+            Swal.fire({
+                html: "Fields cannot be empty.Please Check the fields again",
+                timer: 3000,
+
+                willClose: () => {
+                    clearInterval(timerInterval);
+                }
+            }).then((result) => {
+
+            });
+        }
+
+
+    }
+
+   const checkOtp=()=>{
+           forgetPasswordUser=new Object();
+
+           forgetPasswordUser.username=textForgotUserName.value
+           forgetPasswordUser.email=textEmail.value
+           forgetPasswordUser.otp=textOtp.value
+
+
+           if (textForgotUserName.value!=='' && textEmail.value!== '' && textOtp.value!=='' ){
+
+               Swal.fire({
+                   title: "Verify OTP?",
+                   icon: "warning",
+                   showCancelButton: true,
+                   confirmButtonColor: "#3085d6",
+                   cancelButtonColor: "#d33",
+                   confirmButtonText: "Confirm"
+               }).then((result) => {
+                   if (result.isConfirmed) {
+                       console.log(forgetPasswordUser)
+                       let serverResponse=ajaxRequestBody("/profile/checkotp","POST",forgetPasswordUser);
+                       if (serverResponse=="OK") {
+                           Swal.fire({
+                               title: "OTP verification Successful.",
+                               text: "Enter New Password",
+                               icon: "success"
+                           });
+
+                           textOtp.disabled=true
+                           btnOTP.disabled=true
+
+                           btnUnameEmail.disabled=true
+                           textEmail.disabled=true
+                           textForgotUserName.disabled=true
+
+                           divShowPasswordChange.classList.remove("d-none");
+
+                       }
+                       else{
+                           Swal.fire("Something went wrong", serverResponse, "info");
+
+                       }
+
+                   }
+
+
+
+               })
+           }else{
+               let timerInterval;
+               Swal.fire({
+                   html: "Fields cannot be empty.Please Check the fields again",
+                   timer: 3000,
+
+                   willClose: () => {
+                       clearInterval(timerInterval);
+                   }
+               }).then((result) => {
+
+               });
+           }
+
+
+       }
+
+
+
+    const changeNewPassword=()=>{
+
+
+
+        forgetPasswordUser=new Object();
+
+        forgetPasswordUser.username=textForgotUserName.value
+        forgetPasswordUser.email=textEmail.value
+        forgetPasswordUser.otp=textOtp.value
+
+        if (textNewPassword.value!="") {
+            if (textNewPassword.value==textRTNewPassword.value) {
+
+
+                forgetPasswordUser.newpassword=textNewPassword.value
+            } else {
+                let timerInterval;
+                Swal.fire({
+                    title: "Password Mismatch",
+                    timer: 3000,
+
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                }).then((result) => {
+                    forgetPasswordUser.newpassword=null;
+                    textNewPassword.value=''
+                    textRTNewPassword.value=''
+                });
+
+            }
+        }
+
+
+        if (textForgotUserName.value!=='' && textEmail.value!== '' && textOtp.value!=='' &&  textNewPassword.value!=='') {
+
+            Swal.fire({
+                title: 'Confirm Password Change',
+                text: 'Are you sure you want to reset your password?',
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Confirm"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log(forgetPasswordUser)
+                    let serverResponse = ajaxRequestBody("/profile/changenewpassword", "POST", forgetPasswordUser);
+                    if (serverResponse == "OK") {
+                        Swal.fire({
+                            title: "Password reset Successful.",
+                            icon: "success"
+                        });
+
+                        window.location.reload();
+
+                    } else {
+                        Swal.fire("Something went wrong", serverResponse, "info");
+
+                    }
+
+                }
+
+
+            })
+        }else{
+            let timerInterval;
+            Swal.fire({
+                html: "Fields cannot be empty.Please Check the fields again",
+                timer: 3000,
+
+                willClose: () => {
+                    clearInterval(timerInterval);
+                }
+            }).then((result) => {
+
+            });
+        }
+
+
+    }
+
+
+</script>
+
+
+  </body>
+</html>

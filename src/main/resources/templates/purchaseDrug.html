@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+     <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+ 
+   <!-- link datatTable css file -->
+   <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+   
+   <!-- link dataTable js file -->
+   <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="/resources/js/sweetalert.js"></script>
+    <
+
+
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"><i class="fa-solid  fa-1x"></i> Purchase  Item Management</h2>
+            </div>
+        </div>
+       </div>
+
+
+        <div class="row mt-3">
+            <div class="col-1"></div>
+            <div class="col-6 mb-2">
+                <ul class="nav nav-pills ms-2 "  >
+
+                    <li class="nav-item " style="border-color: #0a53be" >
+                         <a class="nav-link active "    data-bs-toggle="tab" href="#PurchaseDrugTable"><i class="fa-solid fa-outdent me-3"></i> Purchase Item Table</a>
+
+                    </li>
+
+                    <li class="nav-item" style="border-color: #0a53be">
+                        <a class="nav-link "  data-bs-toggle="tab" href="#PurchaseDrugForm"  ><i class="fa-regular fa-pen-to-square me-3"></i> Purchase Item Form </a>
+
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-3 mb-2 text-end" >
+                <ul class="nav nav-pills ms-3 ">
+                    <li class="nav-item " style="border-color: #0a53be">
+                        <button type="button" class="btn btn-info me-3" onclick="printCompleteTable()" style="color: white">Print Purchase Item Table</button>
+                    </li>
+                </ul>
+
+            </div>
+<!--            <div class="col-1"></div>-->
+
+
+        </div>
+
+        <div class="tab-content" >
+            <div class="tab-pane fade " id="PurchaseDrugForm">
+                <!-- purchase form start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <div class="card form-area ">
+                            <div class="card-body ">
+
+                                <div class="row mt-3">
+
+                                    <div class="col-1"></div>
+                                    <div class="col-6 mt-3  ">
+
+                                        <h2 class=" mt-3 align-center" id="Title"> New Purchase Item Enrollment</h2>
+
+
+                                    </div>
+                                    <div class="col-3 text-center mt-3">
+                                    </div>
+
+                                    <div class="col-1  mt-3 align-middle text-center">
+                                        <button class="btn btn-primary" id="refreshBtn" onclick="refreshPurchasedrugFormByuserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>
+
+
+                                    <div class="row">
+                                        <div class="col-1"></div>
+                                        <div class="col-10 form-area mt-2">
+
+
+
+                                            <hr class="hr mb-3" />
+
+                                            <!-- form area start -->
+
+                                            <form action="" onsubmit="return false">
+                                                <!-- reqired field -->
+                                                <div class="row">
+                                                    <div class="col-12 text-end  ">
+
+                                                        <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- reqired field end  -->
+
+                                                <!-- Drug name field start -->
+                                                <div class="row mt-2 mb-2">
+
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label for="selectItemType" class="fw-bold form-label">Item Type <span class="text-danger">*</span></label>
+                                                            <select class="form-select" id="selectItemType" required
+                                                                    onchange="FilterByItemType();">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="col-8">
+
+                                                        <div class="form-group ">
+                                                            <label for="selectSalesDrugName" class="fw-bold form-label"> Sales Item <span class="text-danger">*</span></label>
+                                                            <select class="form-select" id="selectSalesDrugName" required
+                                                                    onchange="dropDownValidationD(selectSalesDrugName,'','purchasedrug','salesdrug_id');enabledrugfields();generateDrugNameNM()">
+                                                                <option selected disabled>select the ITEM TYPE first</option>
+
+                                                            </select>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                  <!-- Drug name field end -->
+
+
+
+                                                <!-- conversion factor card factor tablet count -->
+                                                <div class="row mt-2 mb-2">
+
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label for="textCardFactor" class="fw-bold form-label"> Card/Bottle Factor <i class="fa-solid fa-question" data-toggle="tooltip" data-placement="bottom" title="Number of card in a box.(for tablets and capsules), 1 for tablets/capsules comes in bottle" style="color: #ff0000;"></i></label>
+                                                            <input type="text" id="textCardFactor" class="form-control"  placeholder="Enter Card/Bottle Factor"
+                                                                   onkeyup="textFieldValiation(textCardFactor,'^([1-9]{1}[0-9]{0,1})$','purchasedrug','cardfactor');calculateConversionFactor2();"
+                                                                   >
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label for="textTabletCount" class="fw-bold form-label"> Tablet Count   <i class="fa-solid fa-question " data-toggle="tooltip" data-placement="bottom" title="Number of Tablets/Capsules in a card/bottle" style="color: #ff0000;"></i></label>
+                                                            <input type="text" class="form-control" id="textTabletCount"  placeholder="Enter Tablet Count"
+                                                                    onkeyup="textFieldValiation(textTabletCount,'^([1-9]{1}[0-9]{0,2})$','purchasedrug','nooftablets');calculateConversionFactor();calculateConversionFactor2()"
+                                                                  />
+
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label for="textConversionFactor" class="fw-bold form-label"> Conversion Factor</label>
+                                                            <input type="text" id="textConversionFactor" class="form-control" placeholder="Enter Conversion Factor" data-toggle="tooltip" data-placement="bottom" title="(card/bottle factor*tablet count)"
+                                                                   onkeyup="textFieldValiation(textConversionFactor,'^([1-9]{1}[0-9]{0,2})$','purchasedrug','conversionfactor');"
+                                                                   >
+
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                                <!-- conversion factor card factor tablet count-->
+
+                                                <!-- drug status product type field start -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col-6">
+
+                                                        <div class="form-group ">
+                                                            <label for="selectProductType" class="fw-bold form-label">Product type </label>
+                                                            <select class="form-select" id="selectProductType"
+                                                                    onchange="dropDownValidationD(selectProductType,'','purchasedrug','purchasedrugtype_id');
+                                                                     generateDrugName();generateDrugNameNM()
+                                                                   ">
+                                                                <option value="" selected disabled>Select Product type</option>
+                                                            </select>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <div class="form-group ">
+                                                            <label for="selectDrugStatus" class="fw-bold form-label"> Drug status <span class="text-danger">*</span></label>
+                                                            <select class="form-select" id="selectDrugStatus" required
+                                                                    onchange="dropDownValidationD(selectDrugStatus,'','purchasedrug','purchasedrugstatus_id');">
+                                                                <option value="" selected disabled>Select drug status</option>
+                                                            </select>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                                <!-- drug status product type field end -->
+
+                                                <!-- Drugname field -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="textPurchaseDrug" class="fw-bold">Purchase Item </label>
+                                                        <input type="text" class="form-control" id="textPurchaseDrug" disabled readonly placeholder="Item Name will auto generated"
+                                                                  onkeyup="textFieldValiation(textPurchaseDrug,'','purchasedrug','name')"
+                                                        >
+                                                    </div>
+                                                </div>
+                                                <!-- drugname field end -->
+
+                                                <!-- Note field -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="textNote" class="fw-bold">Note </label>
+                                                        <textarea type="text" class="form-control" id="textNote" placeholder="Enter Note"
+                                                                  onkeyup="textFieldValiation(textNote,'^.*$','purchasedrug','note')"
+                                                        ></textarea>
+                                                    </div>
+                                                </div>
+                                                <!-- Note field end -->
+
+                                                       <div class="row mt-5 mb-3">
+                                                    <div class="col-4 text-start">
+                                                        <button type="button" class="btn btn-danger buttons btn-clear" onclick="buttonPurchaseDrugClear()" >
+<!--                                                               -->
+                                                        <i class="fa-solid fa-trash text-end"></i> CLEAR</button>
+                                                    </div>
+                                                    <div class="col-8 text-end">
+                                                        <button type="button" class="btn btn-warning buttons" id="btnUpdateGrg" onclick="buttonPurchaseDrugUpdate()"><i class="fas fa-edit"></i> UPDATE</button>
+                                                        <button type="submit" class="btn btn-success buttons" id="btnAddGrg" onclick="buttonPurchaseDrugAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                                    </div>
+                                                </div>
+                                            </form>
+
+
+
+
+                                        </div>
+                                        <div class="col-1"></div>
+
+
+
+                                    </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                    <!--  form end -->
+                </div>
+            </div>
+            <div class="tab-pane fade show active" id="PurchaseDrugTable" >
+                <!--  table start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10  ">
+                        <div class="card table-area p-2" >
+                            <table class="table table-hover" id="tableDrug">
+                                <thead class="text-center">
+                                <tr>
+                                    <th>#</th>
+                                    <th class="text-center">Drug code-Name</th>
+                                    <th>Conversion Factor</th>
+                                    <th>Added user</th>
+                                    <th>Status</th>
+
+                                    <th class="btn-display">Action</th>
+
+                                </tr>
+
+                                </thead>
+                                <tbody  class="text-start">
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!--  table end -->
+
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-5">
+            <div class="col-1"></div>
+            <div class="col-10 ">
+
+            </div>
+            <div class="col-1 text-end ">
+
+            </div>
+
+        </div>
+
+
+       
+    
+
+
+    </div>
+<!--print  details-->
+  <div class="modal" id="modalPrint">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>view details</h2>
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+
+
+                <div class="col-md-12" id="printDrugTable">
+                    <div class="card m-1">
+                        <div class="card-body " >
+                            <div class="row">
+                                <div class="col-12 mb-1">
+                                    <h1 class="text-center" >Purchase Item Details</h1>
+
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Item code</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdDrugId"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-sm-3">
+                                    <p class="mb-0" >Item Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdDrugName"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Card Factor</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdCardFactor"></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Tablet Factor</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdTabletFactor"></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Conversion Factor</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdConversionFactor"></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Product Type</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdProductType"></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Drug Status</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdDrugStatus"></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Note</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdNote"></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Added User</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdUser"></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Added Date-Time</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="tdAddedDateTime"></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Available Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+      <!-- table function  js-->
+      <script src="resources/js/tablefunction.js"></script> 
+      <!-- common function  js -->
+      <script src="resources/js/common.js"></script>
+      <!--validation files  -->
+<!--      <script src="resources/js/emp-val.js"></script>-->
+<script src="resources/js/validation.js"></script>
+
+<script src="resources/js/dashboard.js"></script>
+        <!-- emp js -->
+        <script src="resources/controllerjs/purchasedrug.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+</body>
+</html>
+

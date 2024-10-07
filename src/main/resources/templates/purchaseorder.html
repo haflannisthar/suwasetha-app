@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+     <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+ 
+   <!-- link datatTable css file -->
+   <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+   
+   <!-- link dataTable js file -->
+   <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="/resources/js/sweetalert.js"></script>
+
+    
+
+   
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"><i class="fa-solid  fa-1x"></i> Purchase Order Management</h2>
+            </div>
+        </div>
+       </div>
+
+
+        <div class="row mt-3">
+            <div class="col-1"></div>
+            <div class="col-6 mb-2">
+                <ul class="nav nav-pills ms-2 "  >
+
+                    <li class="nav-item " style="border-color: #0a53be" >
+                         <a class="nav-link active "    data-bs-toggle="tab" href="#PurchaseOrderTable"><i class="fa-solid fa-outdent me-3"></i> Purchase Order Table</a>
+
+                    </li>
+
+                    <li class="nav-item" style="border-color: #0a53be">
+                        <a class="nav-link "  data-bs-toggle="tab" href="#PurchaseOrderForm"  ><i class="fa-regular fa-pen-to-square me-3"></i>Purchase Order Form </a>
+
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-3 mb-2 justify-content-end" >
+                <ul class="nav nav-pills ms-3 ">
+                    <li class="nav-item " style="border-color: #0a53be">
+                        <button type="button" class="btn btn-info me-3" onclick="printCompleteTable()" style="color: white">Print Purchase Order Table</button>
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+
+        <div class="tab-content" >
+            <div class="tab-pane fade " id="PurchaseOrderForm">
+                <!--  form start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <div class="card form-area ">
+                            <div class="card-body ">
+
+                                <div class="row mt-3">
+
+                                    <div class="col-1"></div>
+                                    <div class="col-6 mt-3  ">
+
+                                        <h2 class=" mt-3 align-center" id="porderTitle"> New Purchase Order Enrollment</h2>
+
+
+                                    </div>
+                                    <div class="col-3 text-center mt-3">
+                                    </div>
+
+                                    <div class="col-1  mt-3 align-middle text-center">
+                                        <button class="btn btn-primary" id="purchaseorderrefreshbtn" onclick="refreshPurchaseOrderFormByUserConfirm()" data-toggle="tooltip" data-placement="bottom" title="refresh"><i class="fas fa-sync-alt"></i></button>
+
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>
+
+
+                                    <div class="row">
+
+                                        <div class="col-12 form-area mt-2">
+
+
+
+                                            <hr class="hr mb-3" />
+
+                                            <!-- form area start -->
+
+                                            <form action="" onsubmit="return false">
+                                                <!-- reqired field -->
+                                                <div class="row">
+                                                    <div class="col-12 text-end  ">
+
+                                                        <span class="fw-bold"><span class="text-danger">*</span>required</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- reqired field end  -->
+
+                                                <div class="row mt-2 mb-3">
+                                                    <div class="col-4">
+                                                        <!-- supplier and required date field start -->
+                                                        <div class="row mt-2 mb-2">
+                                                            <div class="form-group ">
+                                                                <label for="selectSupplier" class="fw-bold form-label"> Supplier <span class="text-danger">*</span></label>
+                                                                <select id="selectSupplier" class="form-select" required
+                                                                        onchange="dropDownValidationD(selectSupplier,'','purchaseorder','supplier_id'); filterItemBySupplier() ; enableItemField()"
+                                                                >
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-2 mb-2">
+                                                            <div class="form-group ">
+                                                                <label for="textRequiredDate" class="fw-bold form-label">Required Date <span class="text-danger">*</span></label>
+                                                                <input type="date" class="form-control" id="textRequiredDate" required
+                                                                       onchange="dateFieldValiationD(textRequiredDate,'^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$','purchaseorder','requireddate');
+                                                                  ">
+                                                            </div>
+                                                        </div>
+                                                        <!-- supplier and required date field end -->
+
+                                                        <div class="row mt-2 mb-2">
+                                                            <div class="form-group ">
+                                                                <label for="textTotalAmount" class="fw-bold form-label">Total Amount <span class="text-danger">*</span></label>
+                                                                <input type="text" id="textTotalAmount" class="form-control"  required disabled readonly placeholder="auto-calculated"
+                                                                       onkeyup="textFieldValiation(textTotalAmount,'^$','purchaseorder','totalamount')">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-2 mb-2">
+                                                            <div class="form-group ">
+                                                                <label for="selectPurchaseOrderStatus" class="fw-bold form-label">Purchase Order Status <span class="text-danger">*</span></label>
+                                                                <select  id="selectPurchaseOrderStatus" class="form-select" required
+                                                                         onchange=" dropDownValidationD(selectPurchaseOrderStatus,'','purchaseorder','porderstatus_id')">
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mt-2 mb-2">
+                                                            <div class="form-group">
+                                                                <label for="textNote" class="fw-bold">Note </label>
+                                                                <textarea type="text" class="form-control" id="textNote" placeholder="Enter Note"
+                                                                          onkeyup="textFieldValiation(textNote,'^.*$','purchaseorder','note')"
+                                                                ></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+<!--                                                    inner form and inner table-->
+                                                    <div class="col-8">
+                                                        <div class="row mt-2 mb-2">
+                                                            <label for="txtPurchaseDrug" class="fw-bold form-label">Purchase Item <span class="text-danger">*</span></label>
+
+                                                            <input type="text" id="txtPurchaseDrug" class="form-control" list="datalistitems" placeholder="Select Item" required
+                                                                   onkeyup="DataListValidationD(txtPurchaseDrug,'purchaseItemList','purchaseorderdrug','purchasedrug_id','name');clearInputFields()" onchange="checkItem() ; enableUnitPrice();checkValidItem();checkAvailableQty();">
+                                                            <datalist id="datalistitems">
+
+                                                            </datalist>
+                                                        </div>
+                                                        <div class="row mt-2 mb-2">
+                                                            <div class="col-4">
+                                                                <label for="textUnitPrice" class="fw-bold form-label">Unit Price <span class="text-danger">* </span></label>
+                                                                <input type="text" class="form-control" id="textUnitPrice" required placeholder="Enter Unit Price"
+                                                                       onkeyup="textFieldValiation(textUnitPrice,'^[1-9][0-9]{1,5}(\\.[0-9]{2})?$','purchaseorderdrug','unitprice');enableQuantityField()" onchange="insertDecimalPoints()"    >
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label for="textQuantity" class="fw-bold form-label">Quantity <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" id="textQuantity" required placeholder="Enter Quantity"
+                                                                       onkeyup="textFieldValiation(textQuantity,'^[1-9][0-9]{0,3}$','purchaseorderdrug','quantity');calculateLinePrice(); ">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label for="textLinePrice" class="fw-bold form-label">Line Price <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" id="textLinePrice" required  disabled readonly placeholder="auto-calculated"
+                                                                       onkeyup="textFieldValiation(textLinePrice,'^[1-9][0-9]{0,7}[.][0-9]{2}$','purchaseorderdrug','lineprice'); ">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-2 mb-2 ">
+                                                            <div class="col-8"></div>
+                                                            <div class="col-4 text-end">
+                                                                <button type="button" class="btn btn-success buttons" id="btnInnerForm"  onclick="btnInnerDrugAdd()"><i class="fas fa-save"></i> Add</button>
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row mt-3 mb-2">
+                                                            <table class="table table-sm table-dark" id="purchaseiteminnertable">
+                                                                <thead >
+                                                                <tr>
+
+                                                                    <th>#</th>
+                                                                    <th class="text-center">Purchase Item</th>
+                                                                    <th>Unit Price</th>
+                                                                    <th>Quantity</th>
+                                                                    <th>Line Price</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+<!--                                                button field start-->
+                                                <div class="row mt-5 mb-3">
+                                                    <div class="col-4 text-start">
+                                                        <button type="button" class="btn btn-danger buttons btn-clear" onclick="buttonPurchaseOrderClear()" >
+<!--                                                               -->
+                                                        <i class="fa-solid fa-trash text-end"></i> CLEAR</button>
+                                                    </div>
+                                                    <div class="col-8 text-end">
+                                                        <button type="button" class="btn btn-warning buttons" id="btnUpdate" onclick="buttonPurchaseOrderUpdate()"><i class="fas fa-edit"></i> UPDATE</button>
+                                                        <button type="button" class="btn btn-success buttons" id="btnAdd" onclick="buttonPurchaseOrderAdd()"><i class="fas fa-save"></i> SAVE</button>
+
+                                                    </div>
+                                                </div>
+<!--                                                button field end-->
+                                            </form>
+
+
+
+
+                                        </div>
+
+
+
+
+                                    </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                    <!--  form end -->
+                </div>
+            </div>
+            <div class="tab-pane fade show active" id="PurchaseOrderTable" >
+                <!--  table start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10  ">
+                        <div class="card table-area p-2" >
+                            <table class="table table-hover" id="tablePurchaseOrder">
+                                <thead >
+                                <tr>
+                                    <th>#</th>
+                                    <th>order code</th>
+                                    <th> Supplier</th>
+                                    <th>Required Date</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+
+                                    <th class="btn-display">Action</th>
+
+                                </tr>
+
+                                </thead>
+                                <tbody >
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!--  table end -->
+
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-5">
+            <div class="col-1"></div>
+            <div class="col-10 ">
+
+            </div>
+            <div class="col-1 text-end ">
+
+            </div>
+
+        </div>
+
+
+       
+    
+
+
+    </div>
+
+<!--print  details-->
+  <div class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="col-md-12" id="printPurchaseOrderTable">
+                    <div class="card m-1">
+                        <div class="card-body " >
+                            <div class="row">
+                                <div class="col-2" ></div>
+                                <div class="col-3 " >
+                                    <img src="/resources/images/Suwa-setha-3.png" alt="picture-of-suwasetha" class="rounded float-end" width="50px" height="50px">
+                                </div>
+                                <div class="col-5 mb-1">
+                                    <h1 class="text-start" >Purchase Order Details</h1>
+
+                                </div>
+                                <div class="col-2" ></div>
+
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-5"  >
+                                    <p class="mb-0">
+                                        <span > Supplier Code-Name : </span>
+                                        <span class="text-muted mb-0" id="tdSupplierName"></span>
+
+                                    </p>
+                                </div>
+                                <div class="col-2 d-flex justify-content-center align-items-center" >
+                                </div>
+<!--                                vetical line-->
+                                <div class="col-5">
+
+                                    <p class="mb-0">
+                                        <span > Purchase Order Code : </span>
+                                        <span class="text-muted mb-0" id="tdPorderNumber"></span>
+
+                                    </p>
+
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> Required Date : </span>
+                                        <span class="text-muted mb-0" id="tdRequiredDate"> </span>
+                                    </p>
+                                </div>
+
+                                <div class="col-2 d-flex justify-content-center align-items-center" >
+                                </div>
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> Order Status : </span>
+                                        <span class="text-muted mb-0" id="tdPOrderStatus"> </span>
+                                    </p>
+                                </div>
+
+                            </div>
+                            <hr>
+
+                            <div class="row">
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> Total Amount : </span>
+                                        <span class="text-muted mb-0" id="tdTotalAmount"> </span>
+                                    </p>
+                                </div>
+
+                                <div class="col-2 d-flex justify-content-center align-items-center" >
+                                </div>
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> Supplier Contact Number : </span>
+                                        <span class="text-muted mb-0" id="tdMobile"> </span>
+                                    </p>
+                                </div>
+
+                            </div>
+                            <hr>
+                            <div class="row">
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> Note : </span>
+                                        <span class="text-muted mb-0" id="tdNote"> </span>
+                                    </p>
+                                </div>
+
+                                <div class="col-2 d-flex justify-content-center align-items-center" >
+                                </div>
+
+                                <div class="col-5">
+                                    <p class="mb-0">
+                                        <span> Added User : </span>
+                                        <span class="text-muted mb-0" id="tdUser"> </span>
+                                    </p>
+                                </div>
+
+                            </div>
+                            <hr>
+
+                            <div class="row" style="background-color: darkgray">
+                                <div class="col-12 d-flex justify-content-center align-items-center">
+                                    <p><span style="font-size: 20px"> Purchase Items </span></p>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-2"></div>
+                                <div class="col-8">
+                                    <table class="table table-striped table-hover table-bordered" id="printinnertable">
+                                        <thead >
+                                        <tr>
+
+                                            <th>#</th>
+                                            <th class="text-center">Purchase Item</th>
+                                            <th>Unit Price</th>
+                                            <th>Quantity</th>
+                                            <th>Line Price</th>
+                                        </tr>
+
+                                        </thead>
+                                        <tbody >
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <div class="col-2"></div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+      <!-- table function  js-->
+      <script src="resources/js/tablefunction.js"></script> 
+      <!-- common function  js -->
+      <script src="resources/js/common.js"></script>
+      <!--validation files  -->
+<!--      <script src="resources/js/emp-val.js"></script>-->
+      <script src="resources/js/validation.js"></script>
+        <!-- emp js -->
+        <script src="resources/controllerjs/purchaseorder.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+</body>
+</html>

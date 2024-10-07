@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+    <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+
+    <script src="/resources/js/sweetalert.js"></script>
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+
+
+
+
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<!--<div th:replace="~{sidebar :: SidebarFragment}">-->
+    <div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"> Income Reports</h2>
+            </div>
+        </div>
+      </div>
+
+
+        <div class="row mt-3 mb-2">
+             <div class="col-2"></div>
+            <div class="col-2">
+
+                   <input type="date" class="form-control" id="selectStartDate">
+
+            </div>
+            <div class="col-2">
+                <input type="date" class="form-control" id="selectEndDate">
+
+
+            </div>
+            <div class="col-2">
+               <select class="form-select" id="selectDateOption">
+
+               </select>
+
+
+            </div>
+            <div class="col-3">
+
+                <button type="button" class="btn btn-info me-3" onclick="generateReports()" style="color: white">Generate</button>
+
+            </div>
+            <div class="col-1" >
+            </div>
+
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col-2"></div>
+            <div class="col-3">
+
+
+            </div>
+            <div class="col-6 text-end">
+
+                <button type="button" class="btn btn-success me-3" onclick="printCompleteTable()" style="color: white">Print Table</button>
+                <button type="button" class="btn btn-success me-3" onclick="printChart()" style="color: white">Print Chart</button>
+                <button type="button" class="btn btn-success me-3" onclick="printComplete()" style="color: white">Print Complete</button>
+
+            </div>
+            <div class="col-1" >
+            </div>
+        </div>
+
+
+                <!--  table start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10  ">
+                        <div class="card table-area p-2">
+                            <table class="table table-hover display" id="reportTableSale">
+                                <thead  >
+                                <tr>
+                                    <th>#</th>
+                                    <th>date/week/month/year</th>
+                                    <th>total sale</th>
+
+
+
+                                </tr>
+
+                                </thead>
+                                <tbody >
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!--  table end -->
+
+<!--        chart area start-->
+        <div class="row mt-3">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <div class="card mt-4">
+                    <div class="card-body ">
+                        <div class="row mb-4">
+                            <div  class="card-title col-12  ">
+                            </div>
+
+                        </div>
+                        <div class="mb-0">
+                            <canvas id="saleTotalChart" width="400" height="200"></canvas>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-1"></div>
+
+        </div>
+
+        <!--        id="chartPOrderPrint"-->
+        <div class="row"  style="display: none;">
+            <div class="col-1"></div>
+            <div class="col-10 text-center">
+                <div class="card">
+                    <div class="card-body">
+                        <img id="chartPrintsaleChart"  width="400" height="400" >
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </div>
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- common function  js -->
+<script src="resources/js/common.js"></script>
+
+<!-- table function  js-->
+<script src="resources/js/tablefunction.js"></script>
+<!-- chart function  js-->
+<script src="resources/js/chart.js"></script>
+<!-- report js -->
+<script src="resources/controllerjs/reportsale.js"></script>
+
+
+<script src="resources/controllerjs/notification.js"></script>
+</body>
+</html>

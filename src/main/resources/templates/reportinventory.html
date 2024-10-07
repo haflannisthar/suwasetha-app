@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+     <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+    <script src="/resources/js/sweetalert.js"></script>
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+    <!-- link datatTable css file -->
+    <link rel="stylesheet" href="/resources/DataTables-1.13.7/css/jquery.dataTables.min.css" />
+
+    <!-- link dataTable js file -->
+    <script src="/resources/DataTables-1.13.7/js/jquery.dataTables.min.js"></script>
+
+
+    <style>
+        tfoot input {
+            width: 100%;
+            padding: 3px;
+            box-sizing: border-box;
+        }
+
+    </style>
+
+
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"> Inventory Reports</h2>
+            </div>
+        </div>
+      </div>
+
+
+        <div class="row mt-3 mb-2">
+             <div class="col-1"></div>
+            <div class="col-6">
+
+
+
+            </div>
+            <div class="col-1 text-end">
+<!--                <button type="button" class="btn btn-primary me-3" onclick="getLowDrugsTable()" style="color: white">get Low Stock Drugs</button>-->
+
+            </div>
+            <div class="col-3 text-end">
+                <button type="button" class="btn btn-primary me-3" onclick="getLowDrugsTable()" style="color: white">get Low Stock Drugs</button>
+                <button type="button" class="btn btn-success me-3" onclick="printCompleteTable()" style="color: white">Print Table</button>
+
+            </div>
+            <div class="col-1" >
+            </div>
+
+        </div>
+
+
+                <!--  table start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10  ">
+                        <div class="card table-area p-2">
+                            <table  id="reportInventoryTable">
+                                <thead  >
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item Name</th>
+                                    <th>Available Qty</th>
+                                    <th>ROP</th>
+                                    <th>Action</th>
+
+
+
+                                </tr>
+
+                                </thead>
+                                <tfoot style="display: table-header-group" >
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item Name</th>
+                                    <th>Available Qty</th>
+                                    <th>ROP</th>
+
+                                </tr>
+                                </tfoot>
+                                <tbody >
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!--  table end -->
+
+
+    </div>
+
+
+
+
+
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Available Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- common function  js -->
+<script src="resources/js/common.js"></script>
+
+<!-- table function  js-->
+<script src="resources/js/tablefunction.js"></script>
+
+<!-- emp js -->
+<script src="resources/controllerjs/reportinventory.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+   
+</body>
+</html>

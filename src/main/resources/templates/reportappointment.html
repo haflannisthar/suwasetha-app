@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/resources/images/logo.png" type="image/x-icon">
+
+    <!-- bootstrap -->
+     <link rel="stylesheet" href="../resources/bootstrap-5.3.1-dist/css/bootstrap.min.css">
+     <script src="../resources/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+     
+     <!-- font awesome -->
+     <link rel="stylesheet" href="../resources/fontawesome-free-6.4.2-web/css/all.css">
+ 
+     <!-- css -->
+     <link rel="stylesheet" href="../resources/css/employee.css">
+     <link rel="stylesheet" href="/resources/css/sidepanal.css">
+    <link rel="stylesheet" href="/resources/css/ColSideBar.css">
+
+    <script src="/resources/js/sweetalert.js"></script>
+
+    <!-- jquery -->
+    <script src="resources/js/jQuery.js"></script>
+
+
+
+
+    <title th:text="${title}"></title>
+
+    <script th:inline="javascript">
+        window.addEventListener('load',()=>{
+            let loggedUserImg= /*[[${loggeduserimg}]]*/'loggeduserimg'
+
+            if(loggedUserImg!=null){
+                showuserImage.src=atob(loggedUserImg);
+                userImgTopBar.src=atob(loggedUserImg);
+            }
+
+        })
+    </script>
+</head>
+<body>
+<!--navbar-->
+<nav th:replace="~{topnavbar :: topNavBarFragment}">
+
+</nav>
+
+<!--sidebar/off canvas-->
+<div th:replace="~{colsidebar :: SidebarColFragment}">
+
+</div>
+
+    <div class="container-fluid " style="margin-top: 80px">
+      <div >
+        <div class="row mt-2">
+            <div class="col-12 text-center title-div">
+                <h2 class="h2"> Appointment Reports</h2>
+            </div>
+        </div>
+      </div>
+
+        <div class="row mt-3">
+            <div class="col-1"></div>
+            <div class="col-6 mb-2">
+                <ul class="nav nav-pills ms-2 "  >
+
+                    <li class="nav-item " style="border-color: #0a53be" >
+                        <a class="nav-link active "   data-bs-toggle="tab" href="#AppTable"><i class="fa-solid fa-outdent me-3"></i>Table View</a>
+
+                    </li>
+
+                    <li class="nav-item" style="border-color: #0a53be">
+                        <a class="nav-link "  data-bs-toggle="tab" href="#AppChart"  ><i class="fa-regular fa-pen-to-square me-3"></i>Chart View</a>
+
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-2"></div>
+
+        </div>
+
+        <div class="tab-content " >
+            <div class="tab-pane fade show active " id="AppTable">
+                <div class="row mt-3 mb-2">
+                    <div class="col-1"></div>
+                    <div class="col-3">
+
+                        <select class="form-select" id="selectDoctor" onchange="getLastDoctorAvailabilityDate()" required>
+
+                        </select>
+
+                    </div>
+                    <div class="col-2">
+                        <input type="date" id="selectDate" class="form-control">
+
+                    </div>
+
+                    <div class="col-2">
+                    </div>
+
+                    <div class="col-3">
+
+                        <button type="button" class="btn btn-info me-3" onclick="generatereports()" style="color: white">Generate</button>
+                        <button type="button" class="btn btn-success me-3" onclick="printCompleteTable()" style="color: white">Print Table</button>
+
+                    </div>
+                    <div class="col-1" >
+                    </div>
+
+                </div>
+
+
+                <!--  table start -->
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10  ">
+                        <div class="card table-area p-2">
+                            <table class="table table-hover display" id="reporttableappointment">
+                                <thead  >
+                                <tr>
+                                    <th>#</th>
+                                    <th>App no</th>
+                                    <th>Patient Name</th>
+                                    <th>Doctor Name</th>
+                                    <th>Appointment Date</th>
+                                    <th>Status</th>
+
+
+                                </tr>
+
+                                </thead>
+                                <tbody >
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!--  table end -->
+
+            </div>
+        </div>
+
+        <div class="tab-content" >
+            <div class="tab-pane fade " id="AppChart">
+
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 text-end">
+                        <button type="button" class="btn btn-success me-3 " onclick="printCompleteChart()" style="color: white">Print Chart</button>
+
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-1"></div>
+                    <!-- appointment count by date-->
+                    <div class="col-5" >
+                        <div class="card mt-4">
+                            <div class="card-body ">
+                                <div class="row mb-4">
+                                    <div  class="card-title col-12  ">
+                                        <h5>Appointment Count For Last Week</h5>
+                                    </div>
+
+                                </div>
+                                <div class="mb-0">
+
+                                        <canvas id="appointmentsCountChart" width="400" height="200"></canvas>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="card mt-4">
+                            <div class="card-body ">
+                                <div class="row mb-4">
+                                    <div  class="card-title col-6  ">
+                                        <input type="date" id="selectDateForChart" class="form-control">
+
+                                    </div>
+                                    <div  class="card-title col-6  ">
+                                        <button type="button" class="btn btn-info me-3" onclick="getAppCountreportsByDate()" style="color: white">Generate</button>
+
+                                    </div>
+
+                                </div>
+                                <div class="mb-0">
+                                       <!--appointment chart  of doctor by date-->
+                                    <canvas id="appointmentsCountByDateChart" width="400" height="200"></canvas>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+
+        </div>
+
+
+    </div>
+
+<!--        id="chartAppointmentPrint"-->
+        <div class="row"  style="display: none;">
+            <div class="col-1"></div>
+            <div class="col-10 text-center">
+                <img id="chartPrintAppTotal"  width="400" height="400" >
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <div class="row" style="display: none;">
+            <div class="col-12">
+           <img id="chartPrintByDoctor" width="400" height="400" >
+            </div>
+
+        </div>
+
+
+
+</div>
+
+<div class="modal" id="modalNotification" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 form-area mt-2">
+
+                        <div class="row ">
+                            <div class="col-12 text-end">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                                <span class="text-muted mb-0 text-center h3" >Expiring Drugs</span><br>
+                                <hr class="hr mb-3" />
+                                <table class="table table-hover" id="tableExpiringDrugs"  >
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name </th>
+                                        <th>Batch</th>
+                                        <th>Expire Date</th>
+                                        <th>Avaiable Qty</th>
+
+
+                                    </tr>
+
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-1"></div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- common function  js -->
+<script src="resources/js/common.js"></script>
+
+<!-- table function  js-->
+<script src="resources/js/tablefunction.js"></script>
+
+<!-- chart function  js-->
+<script src="resources/js/chart.js"></script>
+
+<!-- emp js -->
+<script src="resources/controllerjs/reportappointment.js"></script>
+
+<script src="resources/controllerjs/notification.js"></script>
+   
+</body>
+</html>

@@ -1,0 +1,236 @@
+
+<!--sidebar-->
+
+
+<div data-bs-spy="scroll" data-bs-target="#offcanvasMenu" style="position: relative;">
+<div class="offcanvas offcanvas-start overflow-auto" style="background-color: #f5f8fb;" th:fragment="SidebarColFragment"  tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasExampleLabel">
+
+    <div class="wrapper"  >
+        <aside id="sidebar" class="js-sidebar">
+            <!-- Content For Sidebar -->
+            <div class="h-100">
+                <div class=" m-3 align-items-center justify-content-between">
+
+                    <div class="row">
+
+                        <div class="col-9  text-nowrap logo-img">
+<!--                            <img src="/resources/images/sidebarlogo.png" width="180" class="rounded mx-auto d-block">-->
+
+                        </div>
+                        <div class="col-2 mt-1">
+<!--                            <button type="button" class="text-reset"  data-bs-dismiss="offcanvas" >-->
+<!--                                <i class="fa-solid fa-xmark" style="color: #005eff;"></i>-->
+<!--                            </button>-->
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+
+                <div class=" mb-2 align-items-center justify-content-between ">
+                    <a  class="text-nowrap  ">
+                        <!--            <img src="/resources/images/doctor_profile_picture.svg" class="profile-logo rounded mx-auto d-block"  alt="">-->
+                        <img src="/resources/images/user2.jpg" width="100px" height="100px" id="showuserImage" class="profile-logo rounded mx-auto d-block"  alt="">
+                    </a>
+                    <div class="text-center fw-bold" th:text="${loggedusername}">
+                        Sarah Smith
+                    </div>
+                    <div class="text-center role-name " th:text="${rolename}">
+                        haflan
+                    </div>
+                </div>
+
+
+                <ul class="sidebar-nav">
+
+                    <li class="sidebar-item mt-1 mb-1" >
+                        <a href="/dashboard" class="sidebar-link" >
+                            <i class="fas fa-tachometer-alt fa-fw pe-2"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="sidebar-item mt-2 mb-2" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#Admin" data-bs-toggle="collapse"
+                           aria-expanded="false" ><i class="fas fa-male pe-2"></i>
+                            Administration <i class="fa-regular fa-square-caret-down ms-3"></i>
+                        </a>
+                        <ul id="Admin" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/employee" class="sidebar-link">Employee</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/user" class="sidebar-link">User</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/privilege" class="sidebar-link">Privilege</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/role" class="sidebar-link">Role</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/module" class="sidebar-link">Module</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/designation" class="sidebar-link">Designation</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item mt-1 mb-1"  th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#salesItem" data-bs-toggle="collapse"
+                           aria-expanded="false"><i class="fab fa-product-hunt pe-2"></i>
+                            Sales Item <i class="fa-regular fa-square-caret-down ms-3"></i>
+                        </a>
+                        <ul id="salesItem" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/salesdrug" class="sidebar-link">Sales Item</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/itemtype" class="sidebar-link">Item Type</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/category" class="sidebar-link">Category</a>
+                            </li>
+
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/subcategory" class="sidebar-link">Sub Category</a>
+                            </li>
+
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/brand" class="sidebar-link">Brand</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/producttype" class="sidebar-link">Product Type</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/unittype" class="sidebar-link">Unit Type</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+                    <li class="sidebar-item mt-1 mb-1" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#purchaseItem" data-bs-toggle="collapse"
+                           aria-expanded="false"><i class="fas fa-truck-moving pe-2"></i>
+                            Purchase Item  <i class="fa-regular fa-square-caret-down ms-3"></i>
+                        </a>
+                        <ul id="purchaseItem" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/purchasedrug" class="sidebar-link">Purchase Item</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/purchaseproducttype" class="sidebar-link">Product Type</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+                    <li class="sidebar-item mt-1 mb-1" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#Supplier" data-bs-toggle="collapse"
+                           aria-expanded="false"><i class="fas fa-user-tie pe-2"></i>
+                            Supplier  <i class="fa-regular fa-square-caret-down ms-3"></i>
+                        </a>
+                        <ul id="Supplier" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/supplier" class="sidebar-link">Supplier</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/supplierpayment" class="sidebar-link">Supplier Payment</a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item mt-1 mb-1" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#purchaseOrder" data-bs-toggle="collapse"
+                           aria-expanded="false"><i class="fas fa-shopping-cart pe-2"></i>
+                            Purchase Order  <i class="fa-regular fa-square-caret-down ms-3"></i>
+                        </a>
+                        <ul id="purchaseOrder" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/purchaseorder" class="sidebar-link">Purchase Order</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/grn" class="sidebar-link">Grn</a>
+                            </li>
+
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/batch" class="sidebar-link">Batch </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+                    <li class="sidebar-item mt-1 mb-1" th:if="${rolename == 'Manager' || rolename == 'Admin' || rolename == 'Medical Receptionist'}">
+                        <a href="/patient" class="sidebar-link" >
+                            <i class="fas fa-user-injured pe-2"></i>
+                            Patient
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item mt-1 mb-1" th:if="${rolename == 'Manager' || rolename == 'Admin' || rolename == 'Medical Receptionist'}">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#appointment" data-bs-toggle="collapse"
+                           aria-expanded="false"><i class="fas fa-calendar-check pe-2"></i>
+                           Appointment <i class="fa-regular fa-square-caret-down ms-3"></i>
+                        </a>
+                        <ul id="appointment" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/doctoravailability" class="sidebar-link">Doctor Availability</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1">
+                                <a href="/appointment" class="sidebar-link">Appointment</a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item mt-1 mb-1" th:if="${rolename == 'Manager' || rolename == 'Admin' || rolename == 'Doctor'}">
+                        <a href="/prescription" class="sidebar-link " >
+                            <i class="fas fa-first-aid pe-2"></i>
+                            Prescription
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item mt-1 mb-1" >
+                        <a href="#" class="sidebar-link collapsed py-2" data-bs-target="#invoice" data-bs-toggle="collapse"
+                           aria-expanded="false"><i class="fas fa-money-check-alt pe-2 "></i>
+                            Invoice <i class="fa-regular fa-square-caret-down ms-3"></i>
+                        </a>
+                        <ul id="invoice" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item ms-4 mt-1 mb-1" th:if="${rolename == 'Manager' || rolename == 'Admin'|| rolename == 'Medical Receptionist'}">
+                                <a href="/appointmentpayment" class="sidebar-link">Appointment Invoice</a>
+                            </li>
+                            <li class="sidebar-item ms-4 mt-1 mb-1" th:if="${rolename == 'Manager' || rolename == 'Admin'|| rolename == 'Pharmacist'|| rolename == 'Cashier'}">
+                                <a href="/prescriptionpayment" class="sidebar-link">Prescription Invoice</a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item mt-1 mb-1" th:if="${rolename == 'Manager' || rolename == 'Admin'}">
+                        <a href="/report" class="sidebar-link " >
+                            <i class="fas fa-flag-checkered pe-2"></i>
+                            report
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+</div>
+</div>
+
+
+
+
