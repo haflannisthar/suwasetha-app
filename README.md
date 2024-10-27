@@ -20,3 +20,16 @@ Future Enhancements
 
 Online Appointment Booking: Enable patients to book appointments online.
 Advanced Reports: Generate reports for insights into appointment trends and inventory usage.
+
+Usage
+
+Register patients and schedule appointments through the main interface.
+Use the inventory module to manage and track clinic supplies.
+Generate invoices and reports through the admin panel.
+
+Technology Stack
+
+Backend: Spring Boot, Java 17
+Frontend: HTML, CSS, JavaScript, jQuery
+Database: MySQL
+Testing: Selenium, TestNG
