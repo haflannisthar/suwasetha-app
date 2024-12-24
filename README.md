@@ -1,12 +1,12 @@
 ##  Patient, Appointment Scheduling, and Sales Inventory Management System for Suwasetha Clinic
 
-## Header Overview
+##  Overview
 
 This project is a comprehensive Patient, Appointment Scheduling, and Sales Inventory Management System designed for Suwasetha Clinic.
 The system addresses the clinic's key challenges, such as managing patient appointments, prescriptions, and inventory efficiently. 
 It includes features like appointment scheduling, doctor availability management, patient registration, invoicing, pharmacy operations, supplier management, and inventory tracking.
 
-## Header Features
+##  Features
 
 * Patient Registration: Register new patients with essential details and contact information.
 * Appointment Scheduling: Schedule, reschedule, and cancel appointments; manage doctor availability.
@@ -16,18 +16,18 @@ It includes features like appointment scheduling, doctor availability management
 * Automated Reminders: Notify patients of upcoming appointments.
 * Prescription Management: Track and manage patient prescriptions.
 
-## Header Future Enhancements
+##  Future Enhancements
 
 * Online Appointment Booking: Enable patients to book appointments online.
 * Advanced Reports: Generate reports for insights into appointment trends and inventory usage.
 
-## Header Usage
+##  Usage
 
 * Register patients and schedule appointments through the main interface.
 * Use the inventory module to manage and track clinic supplies.
 * Generate invoices and reports through the admin panel.
 
-## Header Technology Stack
+##  Technology Stack
 
 * Backend: Spring Boot, Java 17
 * Frontend: HTML, CSS, JavaScript, jQuery
